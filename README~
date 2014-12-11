@@ -1,5 +1,5 @@
 Shentong is a Haskell implementation of <a
-href=http://www.shenlanguage.org>Shen</a>, a modern Lisp family
+href="http://www.shenlanguage.org">Shen</a>, a modern Lisp family
 programming language which includes many advanced and interesting
 features. The name is thematically in keeping with that of _shen_, a
 construct from an other esoteric religion.
