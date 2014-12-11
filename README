@@ -20,3 +20,9 @@ uniplate
 .. some of which may be in the most recent Haskell Platform
 release. If not, they can be installed with cabal. findbin needs to be
 installed with cabal.
+
+Another important detail: the K Lambda directory must be located in
+the same directory as the *.hs files or Shen[.exe], if one is
+produced.  It doesn't seem possible to save a reloadable image of a
+Haskell program, as you can with Common Lisp. I'm looking into possible
+solutions to this.
