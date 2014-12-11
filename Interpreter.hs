@@ -19,7 +19,7 @@ evalTopLevel (SE se) = process (reduceSExpr [] se) (runKLC . eval V.empty)
 evalTopLevel (Defun name args body) = evalDefun name args body
 
 evalDefun :: Symbol -> ParamList -> SExpr -> KLContext Env IO KLValue
-evalDefun name args body = process go return -- (return . ApplC)
+evalDefun name args body = process go return
     where go = do
             body' <- reduceSExpr args body
             mfix $ \f -> do
