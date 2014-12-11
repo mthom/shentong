@@ -1,0 +1,103 @@
+"**********************************************************************************
+*                           The License						                                      *
+* 										                                                                  *
+* The user is free to produce commercial applications with the software, to 	          *
+* distribute these applications in source or binary  form, and to charge monies         *
+* for them as he sees fit and in concordance with the laws of the land subject 	        *
+* to the following license.							                                                *
+*										                                                                    * 
+* 1. The license applies to all the software and all derived software and 	            *
+*    must appear on such.							                                                  *
+*										                                                                    *
+* 2. It is illegal to distribute the software without this license attached	            *
+*    to it and use of the software implies agreement with the license as such.          *
+*    It is illegal for anyone who is not the copyright holder to tamper with 	          *
+*    or change the license.							                                                *
+*										                                                                    *
+* 3. Neither the names of Lambda Associates or the copyright holder may be used         *
+*    to endorse or promote products built using the software without specific 	        *
+*    prior written permission from the copyright holder.		                            *
+*										                                                                    *
+* 4. That possession of this license does not confer on the copyright holder 	          *
+*    any special contractual obligation towards the user. That in no event 	            * 
+*    shall the copyright holder be liable for any direct, indirect, incidental,        *   
+*    special, exemplary or consequential damages (including but not limited             *
+*    to procurement of substitute goods or services, loss of use, data, 	              * 
+*    interruption), however caused and on any theory of liability, whether in	          * 
+*    contract, strict liability or tort (including negligence) arising in any         	*
+*    way out of the use of the software, even if advised of the possibility of         	*
+*    such damage.						                                                        		* 
+*										                                                                    *
+* 5. It is permitted for the user to change the software, for the purpose of 	          *
+*    improving performance, correcting an error, or porting to a new platform, 	        *
+*    and distribute the derived version of Shen provided the resulting program 	        *
+*    conforms in all respects to the Shen standard and is issued under that             * 
+*    title. The user must make it clear with his distribution that he/she is 	          *
+*    the author of the changes and what these changes are and why. 		                  *
+*										                                                                    *
+* 6. Derived versions of this software in whatever form are subject to the same         *
+*    restrictions. In particular it is not permitted to make derived copies of          *
+*    this software which do not conform to the Shen standard or appear under a          *
+*    different title.								                                                    *
+*										                                                                    *
+*    It is permitted to distribute versions of Shen which incorporate libraries,        *
+*    graphics or other facilities which are not part of the Shen standard.	            *
+*										                                                                    *
+* For an explication of this license see www.shenlanguage.org/license.htm which         *
+* explains this license in full.                                                        *
+*				 						                                                                    *
+*****************************************************************************************
+"(defun shen.f_error (V2122) (do (shen.prhush (cn "partial function " (shen.app V2122 ";
+" shen.a)) (stoutput)) (do (if (and (not (shen.tracked? V2122)) (y-or-n? (cn "track " (shen.app V2122 "? " shen.a)))) (shen.track-function (ps V2122)) shen.ok) (simple-error "aborted"))))
+
+(defun shen.tracked? (V2123) (element? V2123 (value shen.*tracking*)))
+
+(defun track (V2124) (let Source (ps V2124) (shen.track-function Source)))
+
+(defun shen.track-function (V2125) (cond ((and (cons? V2125) (and (= defun (hd V2125)) (and (cons? (tl V2125)) (and (cons? (tl (tl V2125))) (and (cons? (tl (tl (tl V2125)))) (= () (tl (tl (tl (tl V2125)))))))))) (let KL (cons defun (cons (hd (tl V2125)) (cons (hd (tl (tl V2125))) (cons (shen.insert-tracking-code (hd (tl V2125)) (hd (tl (tl V2125))) (hd (tl (tl (tl V2125))))) ())))) (let Ob (eval-kl KL) (let Tr (set shen.*tracking* (cons Ob (value shen.*tracking*))) Ob)))) (true (shen.sys-error shen.track-function))))
+
+(defun shen.insert-tracking-code (V2126 V2127 V2128) (cons do (cons (cons set (cons shen.*call* (cons (cons + (cons (cons value (cons shen.*call* ())) (cons 1 ()))) ()))) (cons (cons do (cons (cons shen.input-track (cons (cons value (cons shen.*call* ())) (cons V2126 (cons (shen.cons_form V2127) ())))) (cons (cons do (cons (cons shen.terpri-or-read-char ()) (cons (cons let (cons Result (cons V2128 (cons (cons do (cons (cons shen.output-track (cons (cons value (cons shen.*call* ())) (cons V2126 (cons Result ())))) (cons (cons do (cons (cons set (cons shen.*call* (cons (cons - (cons (cons value (cons shen.*call* ())) (cons 1 ()))) ()))) (cons (cons do (cons (cons shen.terpri-or-read-char ()) (cons Result ()))) ()))) ()))) ())))) ()))) ()))) ()))))
+
+(set shen.*step* false)
+
+(defun step (V2133) (cond ((= + V2133) (set shen.*step* true)) ((= - V2133) (set shen.*step* false)) (true (simple-error "step expects a + or a -.
+"))))
+
+(defun spy (V2138) (cond ((= + V2138) (set shen.*spy* true)) ((= - V2138) (set shen.*spy* false)) (true (simple-error "spy expects a + or a -.
+"))))
+
+(defun shen.terpri-or-read-char () (if (value shen.*step*) (shen.check-byte (read-byte (value *stinput*))) (nl 1)))
+
+(defun shen.check-byte (V2143) (cond ((= V2143 (shen.hat)) (simple-error "aborted")) (true true)))
+
+(defun shen.input-track (V2144 V2145 V2146) (do (shen.prhush (cn "
+" (shen.app (shen.spaces V2144) (cn "<" (shen.app V2144 (cn "> Inputs to " (shen.app V2145 (cn " 
+" (shen.app (shen.spaces V2144) "" shen.a)) shen.a)) shen.a)) shen.a)) (stoutput)) (shen.recursively-print V2146)))
+
+(defun shen.recursively-print (V2147) (cond ((= () V2147) (shen.prhush " ==>" (stoutput))) ((cons? V2147) (do (print (hd V2147)) (do (shen.prhush ", " (stoutput)) (shen.recursively-print (tl V2147))))) (true (shen.sys-error shen.recursively-print))))
+
+(defun shen.spaces (V2148) (cond ((= 0 V2148) "") (true (cn " " (shen.spaces (- V2148 1))))))
+
+(defun shen.output-track (V2149 V2150 V2151) (shen.prhush (cn "
+" (shen.app (shen.spaces V2149) (cn "<" (shen.app V2149 (cn "> Output from " (shen.app V2150 (cn " 
+" (shen.app (shen.spaces V2149) (cn "==> " (shen.app V2151 "" shen.s)) shen.a)) shen.a)) shen.a)) shen.a)) (stoutput)))
+
+(defun untrack (V2152) (eval (ps V2152)))
+
+(defun profile (V2153) (shen.profile-help (ps V2153)))
+
+(defun shen.profile-help (V2158) (cond ((and (cons? V2158) (and (= defun (hd V2158)) (and (cons? (tl V2158)) (and (cons? (tl (tl V2158))) (and (cons? (tl (tl (tl V2158)))) (= () (tl (tl (tl (tl V2158)))))))))) (let G (gensym shen.f) (let Profile (cons defun (cons (hd (tl V2158)) (cons (hd (tl (tl V2158))) (cons (shen.profile-func (hd (tl V2158)) (hd (tl (tl V2158))) (cons G (hd (tl (tl V2158))))) ())))) (let Def (cons defun (cons G (cons (hd (tl (tl V2158))) (cons (subst G (hd (tl V2158)) (hd (tl (tl (tl V2158))))) ())))) (let CompileProfile (shen.eval-without-macros Profile) (let CompileG (shen.eval-without-macros Def) (hd (tl V2158)))))))) (true (simple-error "Cannot profile.
+"))))
+
+(defun unprofile (V2159) (untrack V2159))
+
+(defun shen.profile-func (V2160 V2161 V2162) (cons let (cons Start (cons (cons get-time (cons run ())) (cons (cons let (cons Result (cons V2162 (cons (cons let (cons Finish (cons (cons - (cons (cons get-time (cons run ())) (cons Start ()))) (cons (cons let (cons Record (cons (cons shen.put-profile (cons V2160 (cons (cons + (cons (cons shen.get-profile (cons V2160 ())) (cons Finish ()))) ()))) (cons Result ())))) ())))) ())))) ())))))
+
+(defun profile-results (V2163) (let Results (shen.get-profile V2163) (let Initialise (shen.put-profile V2163 0) (@p V2163 Results))))
+
+(defun shen.get-profile (V2164) (trap-error (get V2164 profile (value *property-vector*)) (lambda E 0)))
+
+(defun shen.put-profile (V2165 V2166) (put V2165 profile V2166 (value *property-vector*)))
+
+
+
