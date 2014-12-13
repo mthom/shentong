@@ -21,11 +21,15 @@ seconds.
 
 Package dependencies are:
 
-*mtl* \\
-*attoparsec* \\
-*unordered-containers* \\
-*findbin* \\
-*uniplate* \\
+*mtl*
+
+*attoparsec*
+
+*unordered-containers*
+
+*findbin*
+
+*uniplate*
 
 .. some of which may be in the most recent Haskell Platform
 release. If not, they can be installed with cabal. findbin needs to be
