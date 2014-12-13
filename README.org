@@ -1,10 +1,8 @@
-#+TITLE:	Shentong README
+#+TITLE:	Shentong
 #+AUTHOR:	Mark Thom
 #+EMAIL:	markjordanthom@gmail.com
-#+Last Update: 2013-07-21@05:21
 
-** Shentong **
-* A Haskell implementation of the Shen programming language *
+* A Haskell implementation of the Shen programming language * \\
 
 [[vajra.jpg]]
 Shentong is a Haskell implementation of [[http://www.shenlanguage.org][Shen]], a modern Lisp family
