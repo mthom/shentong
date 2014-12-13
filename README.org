@@ -3,7 +3,7 @@
 #+EMAIL:	markjordanthom@gmail.com
 
 * A Haskell implementation of the Shen programming language 
-#+ATTR_HTML: :align center
+#+ATTR_HTML: align=center
 [[vajra.jpg]] \\
 
 Shentong is a Haskell implementation of [[http://www.shenlanguage.org][Shen]], a modern Lisp family
@@ -21,12 +21,17 @@ seconds.
 
 Package dependencies are:
 
-*mtl*
-*attoparsec*
-*unordered-containers*
-*uniplate*
-*findbin*
+*mtl* \\
+*attoparsec* \\
+*unordered-containers* \\
+*uniplate* \\
+*findbin* \\
 
 .. some of which may be in the most recent Haskell Platform
 release. If not, they can be installed with cabal. findbin needs to be
 installed with cabal.
+
+An important note: the K Lambda directory must be included in the
+same directory as the Shen[.exe] executable, if one is
+produced. Until the raw K Lambda code is converted to Haskell and
+compiled as another module in the program, this is essential.
