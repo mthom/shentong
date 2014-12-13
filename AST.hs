@@ -11,12 +11,10 @@ import Data.Traversable
 import Types
 import Utils
 
-reduceSExpr :: (Functor m, MonadState Env m, MonadIO m) =>
-               ParamList -> SExpr -> ExceptT ErrorMsg m RSExpr
+reduceSExpr :: ParamList -> SExpr -> KLContext Env RSExpr
 reduceSExpr args body = markBoundVars args (bakeFreeVars args body)
 
-markBoundVars :: (Functor m, MonadState Env m, MonadIO m) =>
-                 ParamList -> SExpr -> ExceptT ErrorMsg m RSExpr
+markBoundVars :: ParamList -> SExpr -> KLContext Env RSExpr
 markBoundVars args = bake (length args) (zip args [0..])
     where klTrue = Lit (B True)
           klFalse = Lit (B False)
@@ -30,6 +28,8 @@ markBoundVars args = bake (length args) (zip args [0..])
           bake n args (Let v b e) = bake n args (Appl [Lambda v e, b])
           bake n args (Lit a) = pure (RLit a)
           bake n args (Freeze e) = RFreeze <$> bake n args e
+          bake n args (TrapError e tr) =
+              RTrapError <$> bake n args e <*> bake n args tr
           bake n args (If c t f) =
               RIf <$> bake n args c <*> bake n args t <*> bake n args f
           bake n args (And c1 c2) =

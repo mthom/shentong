@@ -67,6 +67,11 @@ parseLambda = inParens $ Lambda <$> (string "lambda" *> ss *> parseSymbol <* ss)
 parseFreeze :: Parser SExpr
 parseFreeze = inParens $ Freeze <$> (string "freeze" *> ss *> parseSExpr <* ss)
 
+parseTrapError :: Parser SExpr
+parseTrapError =
+    inParens $ TrapError <$> (string "trap-error" *> ss *> parseSExpr <* ss)
+    <*> (ss *> parseSExpr <* ss)
+
 parseLet :: Parser SExpr
 parseLet = inParens $ Let <$> (string "let" *> ss *> parseSymbol <* ss)
            <*> parseSExpr <*> (ss *> parseSExpr <* ss)
@@ -88,9 +93,9 @@ parseCond = inParens $ Cond <$> (string "cond" *> ss *> sepBy' parseClause ss)
     where parseClause = inParens $ (,) <$> parseSExpr <*> (ss *> parseSExpr)
 
 parseSExpr :: Parser SExpr
-parseSExpr = parseEmptyList <|> parseFreeze <|> parseLet <|> parseLambda
-             <|> parseIf <|> parseAnd <|> parseOr <|> parseCond <|> parseAppl
-             <|> parseAtom
+parseSExpr = parseEmptyList <|> parseFreeze <|> parseTrapError <|> parseLet <|>
+             parseLambda <|> parseIf <|> parseAnd <|> parseOr <|> parseCond <|>
+             parseAppl <|> parseAtom
 
 parseDefun :: Parser TopLevel
 parseDefun = inParens $ Defun <$> (string "defun" *> ss *> parseSymbol <* ss)

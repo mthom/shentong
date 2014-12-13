@@ -15,7 +15,7 @@ import Types
 import Utils
 import Wrap
 
-valueToTopLevel :: (Functor m, Monad m) => KLValue -> ExceptT ErrorMsg m TopLevel
+valueToTopLevel :: KLValue -> KLContext Env TopLevel
 valueToTopLevel (List [Atom (UnboundSym "defun")
                      , Atom (UnboundSym name)
                      , List args, e]) =
@@ -25,15 +25,14 @@ valueToTopLevel (List [Atom (UnboundSym "defun")
           toParamList _  = throwError "defun form contains invalid lambda list"
 valueToTopLevel se = SE <$> valueToSExpr se
 
-valueToSExpr :: (Functor m, Monad m) => KLValue -> ExceptT ErrorMsg m SExpr
+valueToSExpr :: KLValue -> KLContext Env SExpr
 valueToSExpr (Atom (UnboundSym sym)) = return (Sym sym)
 valueToSExpr (Atom a) = return (Lit a)
 valueToSExpr (List (l:ls)) = applToSExpr l ls
 valueToSExpr (List []) = return EmptyList                             
 valueToSExpr _ = throwError "cannot evaluate list containing non-literal values"
 
-applToSExpr :: (Functor m, Monad m) =>
-               KLValue -> [KLValue] -> ExceptT ErrorMsg m SExpr
+applToSExpr :: KLValue -> [KLValue] -> KLContext Env SExpr
 applToSExpr (Atom (UnboundSym "cond")) l = Cond <$> listOfConds l
     where listOfConds ((List [cond, clause]):cs) =
               (:) <$> ((,) <$> valueToSExpr cond <*> valueToSExpr clause)
@@ -54,11 +53,13 @@ applToSExpr (Atom (UnboundSym "or")) [c1,c2] =
     Or <$> valueToSExpr c1 <*> valueToSExpr c2
 applToSExpr (Atom (UnboundSym "freeze")) [e] =
     Freeze <$> valueToSExpr e
+applToSExpr (Atom (UnboundSym "trap-error")) [e, h] =
+    TrapError <$> valueToSExpr e <*> valueToSExpr h
 applToSExpr l ls =
     Appl <$> liftA2 (:) (valueToSExpr l) (traverse valueToSExpr ls)
 
-evalKL :: KLValue -> KLContext Env IO KLValue
-evalKL v = process (valueToTopLevel v) evalTopLevel
+evalKL :: KLValue -> KLContext Env KLValue
+evalKL v = valueToTopLevel v >>= evalTopLevel
 
 primitives :: [(Symbol, Function)]
 primitives = [("intern", wrap intern),
@@ -72,8 +73,7 @@ primitives = [("intern", wrap intern),
               ("set", wrap klSet),
               ("value", wrap value),
               ("simple-error", wrap simpleError),
-              ("trap-error", encode [0] trapError),
-              ("error-to-string", encode [0] errorToString),
+              ("error-to-string", wrap errorToString),
               ("cons", wrap klCons),
               ("hd", wrap hd),
               ("tl", wrap tl),

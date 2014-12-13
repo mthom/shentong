@@ -1,13 +1,14 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE Rank2Types #-}
 
 module Types where
 
 import Control.Applicative
-import Control.Monad.Cont
 import Control.Monad.Except
-import Control.Monad.Reader
 import Control.Monad.State
 import Data.Data
 import Data.Generics.Uniplate.Data
@@ -31,6 +32,7 @@ data SExpr = Lit !Atom
            | Or !SExpr !SExpr
            | Cond ![(SExpr,SExpr)]
            | Appl ![SExpr]
+           | TrapError !SExpr !SExpr
            | EmptyList
              deriving (Data, Typeable)
 
@@ -44,6 +46,7 @@ data RSExpr = RLit !Atom
             | RIf !RSExpr !RSExpr !RSExpr
             | RApplDir !(IORef ApplContext) ![RSExpr]
             | RApplForm !RSExpr ![RSExpr]
+            | RTrapError !RSExpr !RSExpr
             | REmptyList
 
 data KLNumber = KI !Integer
@@ -114,40 +117,57 @@ data KLValue = Atom !Atom
              deriving Show
 
 data ApplContext = Func Function
-                 | PL (KLContext Env IO KLValue)
+                 | PL (KLContext Env KLValue)
                  | Malformed ErrorMsg
 
 instance Show ApplContext where
     show _ = "<function>"
 
-data Function = Context (KLValue -> KLContext Env IO KLValue)
-              | ExceptionHandler Function
+data Function = Context (KLValue -> KLContext Env KLValue)
               | PartialApp (KLValue -> Function)
 
 data Env = Env {  symbolTable :: Map Symbol KLValue
                 , functionTable :: Map Symbol (IORef ApplContext) }
 
-newtype KLCont s m a = KLCont {
-      runKLCont :: ContT KLValue (KLContext s m) a
-    } deriving (Functor, Monad, MonadState s, MonadIO, MonadCont)
+newtype KLContext s a = KLContext {
+      runKLC :: forall r. (a -> s -> IO r)
+             -> (ErrorMsg -> s -> IO r)
+             -> s
+             -> IO r
+    }
 
-instance (Functor m, Monad m) => Applicative (KLCont s m) where
-    pure  = return
+instance Monad (KLContext s) where
+    (>>=)  = klcBind
+    return = klcReturn
+
+klcBind :: KLContext s a -> (a -> KLContext s b) -> KLContext s b
+klcBind m f = KLContext $ \sk fk s -> runKLC m (\a s' -> runKLC (f a) sk fk s') fk s
+{-# INLINE klcBind #-}
+
+klcReturn :: a -> KLContext s a
+klcReturn = pure
+{-# INLINE klcReturn #-}
+
+instance Applicative (KLContext s) where
+    pure a = KLContext $ \sk _ s -> sk a s
     (<*>) = ap
 
-liftKLC :: (Monad m) => KLContext s m a -> KLCont s m a
-liftKLC m = KLCont (ContT (m >>=))
+instance Functor (KLContext s) where
+    fmap f (KLContext klc) = KLContext $ \sk fk s -> klc (sk . f) fk s
 
-newtype KLContext s m a = KLContext {
-      runKLContext :: StateT s m a
-  } deriving (Functor, Monad, MonadState s, MonadIO, MonadTrans, MonadFix)
+instance MonadState s (KLContext s) where
+    get = KLContext $ \sk _ s -> sk s s
+    put s = KLContext $ \sk _ _ -> sk () s
 
-instance (Functor m, Monad m) => Applicative (KLContext s m) where
-    pure  = return
-    (<*>) = ap
+liftIO' m = KLContext $ \sk fk s -> do
+              x <- m
+              sk x s
+{-# INLINE liftIO' #-}
 
-evalKLC :: Monad m => KLContext s m a -> s -> m a
-evalKLC (KLContext st) = evalStateT st
+instance MonadIO (KLContext s) where
+    liftIO = liftIO'
 
-runKLC :: Monad m => KLCont s m KLValue -> KLContext s m KLValue
-runKLC m = runContT (runKLCont m) return
+instance MonadError ErrorMsg (KLContext s) where
+    throwError e = KLContext $ \_ fk s -> fk e s
+    catchError m h = KLContext $ \sk fk s -> runKLC m sk (h' sk fk) s
+        where h' sk fk e s = let KLContext m = h e in m sk fk s
