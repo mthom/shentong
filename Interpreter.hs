@@ -20,14 +20,14 @@ evalTopLevel (Defun name args body) = evalDefun name args body
 evalDefun :: Symbol -> ParamList -> SExpr -> KLContext Env KLValue
 evalDefun name args body = do
   body' <- reduceSExpr args body
-  f <- topLevelContext name (length args) body'
+  f <- topLevelContext (length args) body'
   insertFunction name f                 
   return (Atom (UnboundSym name))
 
-topLevelContext :: Monad m => Symbol -> Int -> RSExpr -> m ApplContext
-topLevelContext name 0 e = return (PL (eval V.empty e))
-topLevelContext name n e = return (Func (buildContext n V.empty))
-    where buildContext 1 vals = Context (\x -> (eval (V.snoc vals x) e))
+topLevelContext :: Int -> RSExpr -> KLContext s ApplContext
+topLevelContext 0 e = return (PL (eval V.empty e))
+topLevelContext n e = return (Func (buildContext n V.empty))
+    where buildContext 1 vals = Context (\x -> eval (V.snoc vals x) e)
           buildContext n vals = PartialApp fn
               where fn x = buildContext (n-1) (V.snoc vals x)
 
@@ -84,7 +84,7 @@ evalIf vals c t f =
 
 applyList :: ApplContext -> [KLValue] -> KLContext Env KLValue
 applyList (Malformed e) _ = throwError e
-applyList (PL c)   [] = c
-applyList f        [] = return (ApplC f)
+applyList (PL c) [] = c
+applyList f      [] = return (ApplC f)
 applyList (Func f) (v:vs) = applyList (apply f v) vs
 applyList _ _ = throwError "too many arguments"
