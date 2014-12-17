@@ -13,7 +13,7 @@ import Types
 
 loadFile :: String -> KLContext Env ()
 loadFile file = do
-  progPath <- liftIO $ getProgPath
+  progPath <- liftIO getProgPath
   contents <- liftIO $ readFile (progPath ++ "/" ++ file)
   case parseOnly parseTopLevels (T.pack contents) of
     Left err -> liftIO $ putStrLn err

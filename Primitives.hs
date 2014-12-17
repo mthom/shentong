@@ -78,7 +78,7 @@ str = strFn
     where strFn s@(Atom (Str _)) = return s
           strFn (Atom (UnboundSym s)) = return (Atom (Str s))
           strFn (Atom (B b)) = return (Atom (Str bs))
-              where bs | b == True = "true"
+              where bs | b         = "true"
                        | otherwise = "false"
           strFn (Atom (N n)) = return (Atom (Str s))
               where s = case n of
@@ -140,7 +140,7 @@ simple-error : string --> throwError
 -}
 simpleError :: KLValue -> KLContext s KLValue
 simpleError = simpleErrorFn
-  where simpleErrorFn ( (Atom (Str str))) =
+  where simpleErrorFn (Atom (Str str)) =
           throwError str
         simpleErrorFn v1 =
           throwError "simple-error: first parameter must be a string."
@@ -262,6 +262,7 @@ addressFrom = addressFromFn
           | otherwise = throwError "address<- n v: n must be within range of v."
         addressFromFn _ _ =
             throwError "<-address: requires a positive integer and vector"
+            
 {-
 absvector? : Atom --> boolean
 -}
@@ -282,7 +283,7 @@ writeByte = writeByteFn
             return num
           | otherwise = throwError "write-byte n: must have 0 <= n <= 255."
         writeByteFn v1 v2 =
-          throwError $ "write-byte: takes an integer and a (stream out)."
+          throwError "write-byte: takes an integer and a (stream out)."
 
 {-
 read-byte: read an unsigned 8 bit byte from a stream
@@ -322,7 +323,7 @@ openStream = openStreamFn
           h <- liftIO $ tryToOpenFile (T.concat [homeDir, path]) mode
           case h of
             Left (err :: IOException) -> throwError (T.pack $ show err)
-            Right h  -> return ((toggleMode mode) h)
+            Right h  -> return (toggleMode mode h)
 
 {-
 close: close a stream
@@ -345,16 +346,16 @@ get-time : symbol --> number
 getTime :: KLValue -> KLContext s KLValue
 getTime = getTimeFn
   where seconds t = fromInteger (round t)
-        picoseconds t = (fromInteger t) * 1e-12
+        picoseconds t = fromInteger t * 1e-12
 
         getTimeFn (Atom (UnboundSym "unix")) = do
-          t <- liftIO $ getPOSIXTime
+          t <- liftIO getPOSIXTime
           return (Atom (N (KI (seconds t))))
         getTimeFn (Atom (UnboundSym "run")) = do
-          t <- liftIO $ getCPUTime
+          t <- liftIO getCPUTime
           return (Atom (N (KD (picoseconds t))))
         getTimeFn _ =
-          throwError "get-time: expects one of symbols 'real' or 'unix' as input."
+          throwError "get-time: expects symbol 'real' or 'unix' as input."
 
 binopTemplate :: ErrorMsg -> (forall a. (Num a, Fractional a) => a -> a -> a) ->
                  KLValue -> KLValue -> KLContext s KLValue

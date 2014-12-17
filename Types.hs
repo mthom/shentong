@@ -1,6 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE Rank2Types #-}
@@ -145,15 +144,15 @@ klcBind m f = KLContext $ \sk fk s -> runKLC m (\a s' -> runKLC (f a) sk fk s') 
 {-# INLINE klcBind #-}
 
 klcReturn :: a -> KLContext s a
-klcReturn = pure
+klcReturn a = KLContext $ \sk _ s -> sk a s
 {-# INLINE klcReturn #-}
 
 instance Applicative (KLContext s) where
-    pure a = KLContext $ \sk _ s -> sk a s
+    pure = return
     (<*>) = ap
 
 instance Functor (KLContext s) where
-    fmap f (KLContext klc) = KLContext $ \sk fk s -> klc (sk . f) fk s
+    fmap f (KLContext m) = KLContext $ \sk fk s -> m (sk . f) fk s
 
 instance MonadState s (KLContext s) where
     get = KLContext $ \sk _ s -> sk s s

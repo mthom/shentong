@@ -17,7 +17,7 @@ ss = skipSpace
 
 between a b mp = char a *> ss *> mp <* ss <* char b
 
-inParens p = between '(' ')' p
+inParens = between '(' ')'
 
 parseSymbol :: Parser Symbol
 parseSymbol = do
@@ -35,8 +35,8 @@ parseString = Str . T.pack <$> (char '"' *> chars <* char '"')
   where chars = many' $ escaped <|> PC.satisfy (\c -> isAscii c && c /= '"')
         escaped = char '\\' >> choice (zipWith escapedChar codes replacements)
         escapedChar code replacement = char code >> return replacement
-        codes        = ['b',  'n',  'f',  'r',  't',  '\\', '"', '/']
-        replacements = ['\b', '\n', '\f', '\r', '\t', '\\', '"', '/']
+        codes        = "bnfrt\\\"/"
+        replacements = "\b\n\f\r\t\\\"/"
 
 parseNumber :: Parser Atom
 parseNumber = toKLNumber <$> number

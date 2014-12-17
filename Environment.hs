@@ -34,10 +34,10 @@ valueToSExpr _ = throwError "cannot evaluate list containing non-literal values"
 
 applToSExpr :: KLValue -> [KLValue] -> KLContext Env SExpr
 applToSExpr (Atom (UnboundSym "cond")) l = Cond <$> listOfConds l
-    where listOfConds ((List [cond, clause]):cs) =
+    where listOfConds (List [cond, clause]:cs) =
               (:) <$> ((,) <$> valueToSExpr cond <*> valueToSExpr clause)
                   <*> listOfConds cs
-          listOfConds ((Cons cond clause):cs) =
+          listOfConds (Cons cond clause:cs) =
               listOfConds ((List [cond, clause]):cs)
           listOfConds [] = pure []
           listOfConds _  = throwError "improperly formed cond clause list"
@@ -102,7 +102,7 @@ primitives = [("intern", wrap intern),
 
 initEnv :: (Applicative m, MonadIO m) => m Env
 initEnv = Env initSymbolTable <$> HM.fromList <$> mapM update primitives
-    where update (n, f) = (n,) <$> (liftIO $ newIORef (Func f))
+    where update (n, f) = (n,) <$> liftIO (newIORef (Func f))
 
 initSymbolTable :: HM.Map Symbol KLValue
 initSymbolTable = HM.fromList [("*stoutput*", OutStream stdout),
