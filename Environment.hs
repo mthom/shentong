@@ -102,7 +102,7 @@ primitives = [("intern", wrap intern),
 
 initEnv :: (Applicative m, MonadIO m) => m Env
 initEnv = Env initSymbolTable <$> HM.fromList <$> mapM update primitives
-    where update (n, f) = (n,) <$> liftIO (newIORef (Func f))
+    where update (n, f) = (n,) <$> liftIO (newIORef $! Func f)
 
 initSymbolTable :: HM.Map Symbol KLValue
 initSymbolTable = HM.fromList [("*stoutput*", OutStream stdout),

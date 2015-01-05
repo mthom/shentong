@@ -6,12 +6,9 @@ module Interpreter ( evalTopLevel ) where
 import AST
 import Control.Monad.Except
 import Data.IORef
-import qualified Data.Text as T
-import qualified Data.Text.IO as T
 import qualified Data.Vector as V
 import Types
 import Utils
-import Wrap
 
 evalTopLevel :: TopLevel -> KLContext Env KLValue
 evalTopLevel (SE se) = reduceSExpr [] se >>= eval V.empty
@@ -47,7 +44,7 @@ evalTrapError vals e tr = eval vals e `catchError` handleError
     where handleError e =
               eval vals tr >>= \case
                    ApplC (Func f) -> applyList (Func f) [Excep e]
-                   _ -> throwError "exception handler must be a function."
+                   _ -> throwError "exception handler must be a function"
                    
 evalFreeze :: Bindings -> RSExpr -> KLContext Env KLValue
 evalFreeze vals e = return (ApplC (PL (eval vals e)))

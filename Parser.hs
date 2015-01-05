@@ -28,7 +28,7 @@ parseSymbol = do
                       ++ "=*/+_?$!@~><&%'#`;:{}"
 
 parseEmptyList :: Parser SExpr
-parseEmptyList = char '(' *> ss *> char ')' *> pure (Appl [])
+parseEmptyList = char '(' *> ss *> char ')' *> pure (EmptyList)
 
 parseString :: Parser Atom
 parseString = Str . T.pack <$> (char '"' *> chars <* char '"')

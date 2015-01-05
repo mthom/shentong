@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 
@@ -18,11 +19,11 @@ import Types
 
 exceptionV :: ErrorMsg -> KLValue -> KLContext s KLValue
 exceptionV e v = throwError e'
-    where e' = T.concat [e, " ", T.pack $ show v]
+    where e' = e <> " " <> (T.pack $ show v)
 
 stubFunction :: Monad m => Symbol -> m ApplContext
 stubFunction name = return (Malformed msg)
-    where msg = T.concat ["function ", name, " is not defined"]
+    where msg = "function " <> name <> " is not defined"
 
 functionRef :: (MonadIO m, MonadState Env m) => Symbol -> m (IORef ApplContext)
 functionRef name = do
@@ -44,9 +45,9 @@ insertFunction :: (MonadState Env m, MonadIO m) => Symbol -> ApplContext -> m ()
 insertFunction name f = do
   st <- get
   case HM.lookup name (functionTable st) of
-    Just ref -> liftIO $ f `seq` writeIORef ref f
+    Just ref -> liftIO $ writeIORef ref $! f
     Nothing  -> do
-      ref <- liftIO $ newIORef f
+      ref <- liftIO $ newIORef $! f
       put $ st { functionTable = HM.insert name ref (functionTable st) }
 
 insertSymbol :: MonadState Env m => Symbol -> KLValue -> m ()

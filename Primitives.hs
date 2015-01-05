@@ -15,6 +15,7 @@ import Control.Monad.Trans
 import qualified Data.ByteString.Lazy as BL
 import Data.Char hiding (isSymbol)
 import Data.List
+import Data.Monoid
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import Data.Time.Clock.POSIX
@@ -46,9 +47,8 @@ pos = posFn
             | 0 <= n && n < T.length s =
               return $ Atom . Str . T.singleton $ T.index s n
             | otherwise =
-                throwError $ T.concat ["pos s n: must have n < length s, n: "
-                                      , T.pack (show n)
-                                      , ", s: ", s]
+                throwError $ "pos s n: must have n < length s, n: " 
+                <> (T.pack (show n)) <> ", s: " <> s
 
 {-
 tlstr: returns all but the first unit string of a string
@@ -65,8 +65,7 @@ cn : string --> string --> string
 -}
 cn :: KLValue -> KLValue -> KLContext s KLValue
 cn = cnFn
-    where cnFn (Atom (Str s1)) (Atom (Str s2)) =
-            return (Atom . Str $ T.concat [s1, s2])
+    where cnFn (Atom (Str s1)) (Atom (Str s2)) = return (Atom . Str $ s1 <> s2)
           cnFn v1 v2 = throwError "cn: both parameters must be a string."
 
 {-
@@ -320,7 +319,7 @@ openStream = openStreamFn
         tryToOpenFile path mode = try $ openBinaryFile (T.unpack path) mode
 
         dir path mode homeDir = do         
-          h <- liftIO $ tryToOpenFile (T.concat [homeDir, path]) mode
+          h <- liftIO $ tryToOpenFile (homeDir <> path) mode
           case h of
             Left (err :: IOException) -> throwError (T.pack $ show err)
             Right h  -> return (toggleMode mode h)

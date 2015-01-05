@@ -11,14 +11,6 @@ programming language which includes many advanced and interesting
 features. The name is thematically in keeping with that of /shen/, a
 construct from an other esoteric religion.
 
-It takes about 4-5 seconds for the compiled implementation to load on
-my machine. The codensity transformation was applied to the KLContext
-state transformer, and consequently, the new implementation is
-approximately twice as fast as the first, unoptimized release. I base
-this on the observation that the Shen test suite now takes ~ 170 seconds
-to run to completion, an improvement over the earlier ~ 340
-seconds. 
-
 Package dependencies are:
 
 + mtl

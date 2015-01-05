@@ -3,7 +3,6 @@
 import Control.Monad.Except
 import Data.Attoparsec.Text
 import qualified Data.Text as T
-import qualified Data.Text.IO as T
 import Environment
 import Interpreter
 import Parser
