@@ -56,12 +56,14 @@ insertSymbol name v = do
   put $ st { symbolTable = HM.insert name v (symbolTable st) }
 
 addVal :: Int -> Bindings -> KLValue -> Bindings
-addVal i vals v
-    | i < V.length vals = V.unsafeUpd vals [(i,v)]
-    | otherwise = V.snoc vals v
+addVal i vals v = replace vals
+  where replace (p@(i',_) : is') 
+          | i == i'   = (i,v) : is'
+          | otherwise = p : replace is'
+        replace [] = [(i,v)]
 
 lookupVal :: DeBruijn -> Bindings -> KLContext s KLValue
-lookupVal i vals = maybe err return (vals V.!? i)
+lookupVal i vals = maybe err return (P.lookup i vals)
     where err = throwError "value not found in bindings list"
 
 fromIORef :: MonadIO m => IORef a -> m a

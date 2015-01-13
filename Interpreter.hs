@@ -11,7 +11,7 @@ import Types
 import Utils
 
 evalTopLevel :: TopLevel -> KLContext Env KLValue
-evalTopLevel (SE se) = reduceSExpr [] se >>= eval V.empty
+evalTopLevel (SE se) = reduceSExpr [] se >>= eval []
 evalTopLevel (Defun name args body) = evalDefun name args body
 
 evalDefun :: Symbol -> ParamList -> SExpr -> KLContext Env KLValue
@@ -22,11 +22,11 @@ evalDefun name args body = do
   return (Atom (UnboundSym name))
 
 topLevelContext :: Int -> RSExpr -> ApplContext
-topLevelContext 0 e = PL (eval V.empty e)
-topLevelContext n e = Func (buildContext n V.empty)
-    where buildContext 1 vals = Context (\x -> eval (V.snoc vals x) e)
-          buildContext n vals = PartialApp fn
-              where fn x = buildContext (n-1) (V.snoc vals x)
+topLevelContext 0 e = PL (eval [] e)
+topLevelContext n e = Func (buildContext n [])
+    where buildContext 1 vals = Context (\x -> eval ((n-1,x):vals) e)
+          buildContext m vals = PartialApp fn
+              where fn x = buildContext (m-1) ((n-m,x):vals)
 
 eval :: Bindings -> RSExpr -> KLContext Env KLValue
 eval vals (RDeBruijn db)    = lookupVal db vals

@@ -36,7 +36,7 @@ data SExpr = Lit !Atom
              deriving (Data, Typeable)
 
 type DeBruijn = Int
-type Bindings = Vector KLValue
+type Bindings = [(DeBruijn, KLValue)]
 
 data RSExpr = RLit !Atom
             | RDeBruijn {-# UNPACK #-} !DeBruijn
