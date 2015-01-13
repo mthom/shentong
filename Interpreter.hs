@@ -6,7 +6,6 @@ module Interpreter ( evalTopLevel ) where
 import AST
 import Control.Monad.Except
 import Data.IORef
-import qualified Data.Vector as V
 import Types
 import Utils
 
