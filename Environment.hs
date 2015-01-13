@@ -59,7 +59,7 @@ applToSExpr l ls =
     Appl <$> liftA2 (:) (valueToSExpr l) (traverse valueToSExpr ls)
 
 evalKL :: KLValue -> KLContext Env KLValue
-evalKL v = valueToTopLevel v >>= evalTopLevel
+evalKL = valueToTopLevel >=> evalTopLevel
 
 primitives :: [(Symbol, Function)]
 primitives = [("intern", wrap intern),

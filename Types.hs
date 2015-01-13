@@ -22,10 +22,10 @@ type ErrorMsg = T.Text
 type ParamList = [Symbol]
 
 data SExpr = Lit !Atom
-           | Sym !Symbol
+           | Sym {-# UNPACK #-} !Symbol
            | Freeze !SExpr
            | Let !Symbol !SExpr !SExpr
-           | Lambda !Symbol !SExpr
+           | Lambda {-# UNPACK #-} !Symbol !SExpr
            | If !SExpr !SExpr !SExpr
            | And !SExpr !SExpr
            | Or !SExpr !SExpr
@@ -39,9 +39,9 @@ type DeBruijn = Int
 type Bindings = Vector KLValue
 
 data RSExpr = RLit !Atom
-            | RDeBruijn !DeBruijn
+            | RDeBruijn {-# UNPACK #-} !DeBruijn
             | RFreeze !RSExpr
-            | RLambda !DeBruijn !RSExpr
+            | RLambda {-# UNPACK #-} !DeBruijn !RSExpr
             | RIf !RSExpr !RSExpr !RSExpr
             | RApplDir !(IORef ApplContext) ![RSExpr]
             | RApplForm !RSExpr ![RSExpr]
@@ -49,7 +49,7 @@ data RSExpr = RLit !Atom
             | REmptyList
 
 data KLNumber = KI !Integer
-              | KD !Double
+              | KD {-# UNPACK #-} !Double
                 deriving (Data, Show, Typeable)
 
 instance Eq KLNumber where
@@ -96,18 +96,18 @@ instance Fractional KLNumber where
 
     fromRational r = KD $ fromRational r    
                                    
-data Atom = UnboundSym !Symbol
+data Atom = UnboundSym {-# UNPACK #-} !Symbol
           | B !Bool
           | N !KLNumber
-          | Str !T.Text
+          | Str {-# UNPACK #-} !T.Text
             deriving (Data, Eq, Show, Typeable)
  
-data TopLevel = Defun !Symbol !ParamList !SExpr
+data TopLevel = Defun {-# UNPACK #-} !Symbol !ParamList !SExpr
               | SE !SExpr
 
 data KLValue = Atom !Atom
              | Cons !KLValue !KLValue
-             | Excep !ErrorMsg
+             | Excep {-# UNPACK #-} !ErrorMsg
              | ApplC !ApplContext
              | InStream !Handle
              | List ![KLValue]
