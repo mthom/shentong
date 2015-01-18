@@ -210,7 +210,7 @@ eq v1 v2 = return $ Atom (B (eqFn v1 v2))
         eqFn (List l1) (List l2) = length l1 == length l2 &&
           foldl' (\acc (x,y) -> acc && eqFn x y) True (zip l1 l2)
         eqFn (Cons v1 v2) (Cons v3 v4) = eqFn v1 v3 && eqFn v2 v4
-        eqFn (Vec v1) (Vec v2) = (V.length v1 == V.length v2) && 
+        eqFn (Vec v1) (Vec v2) = V.length v1 == V.length v2 && 
           V.foldl' (\acc (x,y) -> acc && eqFn x y) True (V.zip v1 v2)
         eqFn _ _ = False
 
@@ -219,7 +219,7 @@ type: labels the type of an expression
 (type X A) : A
 -}
 typeA :: KLValue -> KLValue -> KLContext s KLValue
-typeA v t = return v
+typeA v _ = return v
 
 {-
 absvector: a vector in the native platform, indexed from 0 to n inclusive
