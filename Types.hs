@@ -140,11 +140,13 @@ instance Monad (KLContext s) where
     return = klcReturn
 
 klcBind :: KLContext s a -> (a -> KLContext s b) -> KLContext s b
-klcBind m f = KLContext $ \sk fk s -> runKLC m (\a s' -> runKLC (f a) sk fk s') fk s
+klcBind m f = KLContext go
+  where go sk fk s = runKLC m (\a s' -> runKLC (f a) sk fk s') fk s
 {-# INLINE klcBind #-}
 
 klcReturn :: a -> KLContext s a
-klcReturn a = KLContext $ \sk _ s -> sk a s
+klcReturn a = KLContext go
+  where go sk _ s = sk a s
 {-# INLINE klcReturn #-}
 
 instance Applicative (KLContext s) where
