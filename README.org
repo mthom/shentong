@@ -28,3 +28,13 @@ An important note: the K Lambda directory must be included in the
 same directory as the Shen[.exe] executable, if one is
 produced. Until the raw K Lambda code is converted to Haskell and
 compiled as another module in the program, this is essential.
+
+* Try it
+
+  : $> git clone https://github.com/mthom/shentong.git
+  : $> cd shentong
+  : $> cabal sandbox init
+  : $> cabal install
+  : $> cd .cabal-sandbox/bin
+  : $> ln -s ../../K\ Lambda K\ Lambda
+  : $> ./shen
