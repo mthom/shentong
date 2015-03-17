@@ -15,7 +15,7 @@ executable shen
     , bytestring
     , FindBin
     , hashmap
-    , mtl
+    , mtl >= 2.2.1
     , text
     , time
     , uniplate
