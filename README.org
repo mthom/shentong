@@ -14,7 +14,6 @@ construct from an other esoteric religion.
 Package dependencies are:
 
 + mtl
-+ attoparsec
 + unordered-containers
 + uniplate
 + parallel
@@ -23,7 +22,9 @@ Package dependencies are:
 Shentong runs on a fully native Haskell backend directly ported from
 the backend written in Shen's kernel language, K Lambda. It is
 licensed under BSD 3.  If cabal is not used to compile the sources,
-the GHC compiler option *-fno-full-laziness* must be used.
+the GHC compiler option *-fno-full-laziness* must be used, ala
+
+  : ghc -O2 Shen.hs -fno-full-laziness
 
 * Try it
 

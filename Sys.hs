@@ -875,6 +875,7 @@ kl_shen_modh (!kl_V1646) (!kl_V1647) = do !kl_if_0 <- kl_V1646 `pseq` eq (Types.
                                                                                                                                                                                                                                                                                             appl_11 `pseq` (kl_V1647 `pseq` kl_shen_modh appl_11 kl_V1647)) (do klIf (Atom (B True)) (do let !aw_12 = Types.Atom (Types.UnboundSym "shen.f_error")
                                                                                                                                                                                                                                                                                                                                                                                          applyWrapper aw_12 [ApplC (wrapNamed "shen.modh" kl_shen_modh)]) (do return (List []))))))
 
+
 kl_sum :: Types.KLValue -> Types.KLContext Types.Env Types.KLValue
 kl_sum (!kl_V1648) = do let !appl_0 = List []
                         !kl_if_1 <- appl_0 `pseq` (kl_V1648 `pseq` eq appl_0 kl_V1648)
@@ -1059,6 +1060,7 @@ kl_nth (!kl_V1717) (!kl_V1718) = do !kl_if_0 <- kl_V1717 `pseq` eq (Types.Atom (
                                                                                                        appl_3 `pseq` (appl_4 `pseq` kl_nth appl_3 appl_4)) (do klIf (Atom (B True)) (do let !aw_5 = Types.Atom (Types.UnboundSym "shen.f_error")
                                                                                                                                                                                         applyWrapper aw_5 [ApplC (wrapNamed "nth" kl_nth)]) (do return (List []))))
 
+{-
 kl_integerP :: Types.KLValue ->
                Types.KLContext Types.Env Types.KLValue
 kl_integerP (!kl_V1719) = do !kl_if_0 <- kl_V1719 `pseq` numberP kl_V1719
@@ -1066,11 +1068,25 @@ kl_integerP (!kl_V1719) = do !kl_if_0 <- kl_V1719 `pseq` numberP kl_V1719
                                                                                                             kl_Abs `pseq` (appl_2 `pseq` kl_shen_integer_testP kl_Abs appl_2))))
                                               !appl_3 <- kl_V1719 `pseq` kl_shen_abs kl_V1719
                                               appl_3 `pseq` applyWrapper appl_1 [appl_3]) (do return (Atom (B False)))
+-}
+kl_integerP :: Types.KLValue ->
+               Types.KLContext Types.Env Types.KLValue
+kl_integerP (Atom (N (KD d))) = return (Atom (B (d == fromInteger (round d))))
+kl_integerP (Atom (N (KI _))) = return (Atom (B True))
+kl_integerP _ = return (Atom (B False))
+
+{-
+kl_shen_abs :: Types.KLValue ->
+               Types.KLContext Types.Env Types.KLValue               
+kl_shen_abs (!kl_V1720) = do !kl_if_0 <- kl_V1720 `pseq` greaterThan kl_V1720 (Types.Atom (Types.N (Types.KI 0)))
+                             klIf kl_if_0 (do return kl_V1720) (do kl_V1720 `pseq` Primitives.subtract (Types.Atom (Types.N (Types.KI 0))) kl_V1720)
+-}
 
 kl_shen_abs :: Types.KLValue ->
                Types.KLContext Types.Env Types.KLValue
-kl_shen_abs (!kl_V1720) = do !kl_if_0 <- kl_V1720 `pseq` greaterThan kl_V1720 (Types.Atom (Types.N (Types.KI 0)))
-                             klIf kl_if_0 (do return kl_V1720) (do kl_V1720 `pseq` Primitives.subtract (Types.Atom (Types.N (Types.KI 0))) kl_V1720)
+kl_shen_abs (Atom (N n)) = return (Atom (N (abs n)))
+kl_shen_abs _ = throwError "abs: expected number"
+
 
 kl_shen_magless :: Types.KLValue ->
                    Types.KLValue -> Types.KLContext Types.Env Types.KLValue

@@ -32,6 +32,7 @@ module Prolog where
 
 import Control.Monad.Except
 import Control.Parallel
+import Data.Vector
 import Environment
 import Primitives
 import SourceUtils
@@ -2802,11 +2803,22 @@ kl_shen_mk_pvar (!kl_V1023) = do !appl_0 <- absvector (Types.Atom (Types.N (Type
                                  !appl_1 <- appl_0 `pseq` addressTo appl_0 (Types.Atom (Types.N (Types.KI 0))) (ApplC (wrapNamed "shen.pvar" kl_shen_pvar))
                                  appl_1 `pseq` (kl_V1023 `pseq` addressTo appl_1 (Types.Atom (Types.N (Types.KI 1))) kl_V1023)
 
+{-
 kl_shen_pvarP :: Types.KLValue ->
                  Types.KLContext Types.Env Types.KLValue
 kl_shen_pvarP (!kl_V1024) = do (do !kl_if_0 <- kl_V1024 `pseq` absvectorP kl_V1024
                                    klIf kl_if_0 (do !appl_1 <- kl_V1024 `pseq` addressFrom kl_V1024 (Types.Atom (Types.N (Types.KI 0)))
                                                     appl_1 `pseq` eq appl_1 (ApplC (wrapNamed "shen.pvar" kl_shen_pvar))) (do return (Atom (B False)))) `catchError` (\(!kl_E) -> do return (Atom (B False)))
+-}
+
+kl_shen_pvarP :: Types.KLValue ->
+                 Types.KLContext Types.Env Types.KLValue
+kl_shen_pvarP (Vec v) = do let appl_1 = v ! 0
+                           case appl_1 of
+                             ApplC (Func "shen.pvar" _) -> return (Atom (B True))
+                             _ -> return (Atom (B False)) 
+kl_shen_pvarP _ = return (Atom (B False))
+
 
 kl_shen_bindv :: Types.KLValue ->
                  Types.KLValue ->
