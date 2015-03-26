@@ -121,7 +121,9 @@ data ApplContext = Func Symbol Function
                  | Malformed ErrorMsg
 
 instance Show ApplContext where
-    show _ = "<function>"
+    show (Func name _) = "<function " ++ T.unpack name ++ ">"
+    show (PL name _) = "<function " ++ T.unpack name ++ ">"
+    show (Malformed e) = "<function, malformed, message : " ++ T.unpack e ++ ">"
 
 data Function = Context (KLValue -> KLContext Env KLValue)
               | PartialApp (KLValue -> Function)
@@ -162,6 +164,7 @@ instance MonadState s (KLContext s) where
 liftIO' m = KLContext $ \sk fk s -> do
               x <- m
               sk x s
+{-# INLINE liftIO' #-}
 
 instance MonadIO (KLContext s) where
     liftIO = liftIO'
