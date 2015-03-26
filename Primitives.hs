@@ -83,6 +83,8 @@ str = strFn
               where s = case n of
                       KI i -> T.pack $ show i
                       KD d -> T.pack $ show d
+          strFn (ApplC (Func name _)) = return $ (Atom (Str name))
+          strFn (ApplC (PL name _)) = return $ (Atom (Str name))
           strFn v = throwError "str : first parameter must be an atom."
 
 {-
@@ -202,17 +204,26 @@ A --> A --> boolean
 -}
 eq :: KLValue -> KLValue -> KLContext s KLValue
 eq v1 v2 = return $ Atom (B (eqFn v1 v2))
-  where eqFn (Atom (UnboundSym "true")) (Atom (B True)) = True
-        eqFn (Atom (UnboundSym "false")) (Atom (B False)) = True
-        eqFn (Atom (B True)) (Atom (UnboundSym "true")) = True
-        eqFn (Atom (B False)) (Atom (UnboundSym "false")) = True
-        eqFn (Atom a1) (Atom a2) = a1 == a2
-        eqFn (List l1) (List l2) = length l1 == length l2 &&
-          foldl' (\acc (x,y) -> acc && eqFn x y) True (zip l1 l2)
-        eqFn (Cons v1 v2) (Cons v3 v4) = eqFn v1 v3 && eqFn v2 v4
-        eqFn (Vec v1) (Vec v2) = V.length v1 == V.length v2 && 
-          V.foldl' (\acc (x,y) -> acc && eqFn x y) True (V.zip v1 v2)
-        eqFn _ _ = False
+  where
+    -- don't add the lambda and thunk false checks.
+    -- they don't work. for whatever reason.
+    eqFn (ApplC (Func n _)) (Atom (UnboundSym n')) = n == n'
+    eqFn (ApplC (Func n _)) (ApplC (Func n' _)) = n == n'
+    eqFn (ApplC (PL n _)) (ApplC (PL n' _)) = n == n'
+    eqFn (ApplC (PL n _)) (Atom (UnboundSym n'))   = n == n'
+    eqFn (Atom (UnboundSym n')) (ApplC (Func n _)) = n == n'
+    eqFn (Atom (UnboundSym n')) (ApplC (PL n _))   = n == n'
+    eqFn (Atom (UnboundSym "true")) (Atom (B True)) = True
+    eqFn (Atom (UnboundSym "false")) (Atom (B False)) = True
+    eqFn (Atom (B True)) (Atom (UnboundSym "true")) = True
+    eqFn (Atom (B False)) (Atom (UnboundSym "false")) = True
+    eqFn (Atom a1) (Atom a2) = a1 == a2
+    eqFn (List l1) (List l2) = length l1 == length l2 &&
+      foldl' (\acc (x,y) -> acc && eqFn x y) True (zip l1 l2)
+    eqFn (Cons v1 v2) (Cons v3 v4) = eqFn v1 v3 && eqFn v2 v4
+    eqFn (Vec v1) (Vec v2) = V.length v1 == V.length v2 && 
+      V.foldl' (\acc (x,y) -> acc && eqFn x y) True (V.zip v1 v2)
+    eqFn _ _ = False
 
 {-
 type: labels the type of an expression
@@ -240,7 +251,7 @@ address-> : E -> integer -> vector -> vector
 addressTo :: KLValue -> KLValue -> KLValue -> KLContext s KLValue
 addressTo = addressToFn
   where addressToFn (Vec vec) (Atom (N (KI (fromIntegral -> n)))) val
-          | n >= 0 && n < V.length vec = return $ Vec v'
+          | n >= 0 && n < V.length vec = return (Vec v')
           | otherwise =
               throwError "address-> n e v : n must be within range of v."
           where v' = runST $ do
@@ -249,6 +260,8 @@ addressTo = addressToFn
                   V.unsafeFreeze mv
         addressToFn _ _ _ =
           throwError "address->: requires a vector, positive integer, and element"
+        {-# INLINE addressToFn #-}
+{-# INLINE addressTo #-}
 
 {-
 <-address: retrieve a value from a vector address
@@ -269,6 +282,7 @@ absvectorP :: KLValue -> KLContext s KLValue
 absvectorP = absvectorPFn
   where absvectorPFn (Vec v) = return (Atom (B True))
         absvectorPFn _ = return (Atom (B False))
+
 
 {-
 write-byte: write an unsigned 8 bit byte to a stream

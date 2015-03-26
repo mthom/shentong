@@ -16,13 +16,13 @@ evalTopLevel (Defun name args body) = evalDefun name args body
 evalDefun :: Symbol -> ParamList -> SExpr -> KLContext Env KLValue
 evalDefun name args body = do
   body' <- reduceSExpr args body
-  let f = topLevelContext (length args) body'
+  let f = topLevelContext name (length args) body'
   insertFunction name f                 
   return (Atom (UnboundSym name))
 
-topLevelContext :: Int -> RSExpr -> ApplContext
-topLevelContext 0 e = PL (eval [] e)
-topLevelContext n e = Func (buildContext n [])
+topLevelContext :: Symbol -> Int -> RSExpr -> ApplContext
+topLevelContext name 0 e = PL name (eval [] e)
+topLevelContext name n e = Func name (buildContext n [])
     where buildContext 1 vals = Context (\x -> eval ((n-1,x):vals) e)
           buildContext m vals = PartialApp fn
               where fn x = buildContext (m-1) ((n-m,x):vals)
@@ -42,14 +42,14 @@ evalTrapError :: Bindings -> RSExpr -> RSExpr -> KLContext Env KLValue
 evalTrapError vals e tr = eval vals e `catchError` handleError
     where handleError e =
               eval vals tr >>= \case
-                   ApplC (Func f) -> applyList (Func f) [Excep e]
+                   ApplC (Func name f) -> apply (Func name f) [Excep e]
                    _ -> throwError "exception handler must be a function"
                    
 evalFreeze :: Bindings -> RSExpr -> KLContext Env KLValue
-evalFreeze vals e = return (ApplC (PL (eval vals e)))
+evalFreeze vals e = return (ApplC (PL ": thunk" (eval vals e)))
 
 evalLambda :: Monad m => Bindings -> DeBruijn -> RSExpr -> m KLValue
-evalLambda vals i = return . ApplC . Func . evalLambda' vals i
+evalLambda vals i = return . ApplC . Func ": lambda" . evalLambda' vals i
     where evalLambda' vals i e
               | RLambda i' e' <- e = PartialApp (contLambda i' e')
               | otherwise = Context termLambda
@@ -57,7 +57,7 @@ evalLambda vals i = return . ApplC . Func . evalLambda' vals i
                     contLambda i' e' x = evalLambda' (addVal i vals x) i' e'
 
 evalApplDir' :: Bindings -> ApplContext -> [RSExpr] -> KLContext Env KLValue
-evalApplDir' vals ac args = mapM' (eval vals) args >>= applyList ac
+evalApplDir' vals ac args = mapM' (eval vals) args >>= apply ac
 
 evalApplDir :: Bindings -> IORef ApplContext -> [RSExpr] -> KLContext Env KLValue
 evalApplDir vals ref args = fromIORef ref >>= \ac -> evalApplDir' vals ac args
@@ -77,10 +77,3 @@ evalIf vals c t f =
          Atom (B True)  -> eval vals t
          Atom (B False) -> eval vals f
          _              -> throwError "(if c t f): c must evaluate to boolean"
-
-applyList :: ApplContext -> [KLValue] -> KLContext Env KLValue
-applyList (Malformed e) _ = throwError e
-applyList (PL c) [] = c
-applyList f      [] = return (ApplC f)
-applyList (Func f) (v:vs) = applyList (apply f v) vs
-applyList _ _ = throwError "too many arguments"

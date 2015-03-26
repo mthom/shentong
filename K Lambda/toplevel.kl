@@ -1,87 +1,62 @@
-"**********************************************************************************
-*                           The License						                                      *
-* 										                                                                  *
-* The user is free to produce commercial applications with the software, to 	          *
-* distribute these applications in source or binary  form, and to charge monies         *
-* for them as he sees fit and in concordance with the laws of the land subject 	        *
-* to the following license.							                                                *
-*										                                                                    * 
-* 1. The license applies to all the software and all derived software and 	            *
-*    must appear on such.							                                                  *
-*										                                                                    *
-* 2. It is illegal to distribute the software without this license attached	            *
-*    to it and use of the software implies agreement with the license as such.          *
-*    It is illegal for anyone who is not the copyright holder to tamper with 	          *
-*    or change the license.							                                                *
-*										                                                                    *
-* 3. Neither the names of Lambda Associates or the copyright holder may be used         *
-*    to endorse or promote products built using the software without specific 	        *
-*    prior written permission from the copyright holder.		                            *
-*										                                                                    *
-* 4. That possession of this license does not confer on the copyright holder 	          *
-*    any special contractual obligation towards the user. That in no event 	            * 
-*    shall the copyright holder be liable for any direct, indirect, incidental,        *   
-*    special, exemplary or consequential damages (including but not limited             *
-*    to procurement of substitute goods or services, loss of use, data, 	              * 
-*    interruption), however caused and on any theory of liability, whether in	          * 
-*    contract, strict liability or tort (including negligence) arising in any         	*
-*    way out of the use of the software, even if advised of the possibility of         	*
-*    such damage.						                                                        		* 
-*										                                                                    *
-* 5. It is permitted for the user to change the software, for the purpose of 	          *
-*    improving performance, correcting an error, or porting to a new platform, 	        *
-*    and distribute the derived version of Shen provided the resulting program 	        *
-*    conforms in all respects to the Shen standard and is issued under that             * 
-*    title. The user must make it clear with his distribution that he/she is 	          *
-*    the author of the changes and what these changes are and why. 		                  *
-*										                                                                    *
-* 6. Derived versions of this software in whatever form are subject to the same         *
-*    restrictions. In particular it is not permitted to make derived copies of          *
-*    this software which do not conform to the Shen standard or appear under a          *
-*    different title.								                                                    *
-*										                                                                    *
-*    It is permitted to distribute versions of Shen which incorporate libraries,        *
-*    graphics or other facilities which are not part of the Shen standard.	            *
-*										                                                                    *
-* For an explication of this license see www.shenlanguage.org/license.htm which         *
-* explains this license in full.                                                        *
-*				 						                                                                    *
-*****************************************************************************************
-"(defun shen.shen () (do (shen.credits) (shen.loop)))
+"Copyright (c) 2015, Mark Tarver
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of Mark Tarver may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY Mark Tarver ''AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL Mark Tarver BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+
+(defun shen.shen () (do (shen.credits) (shen.loop)))
 
 (defun shen.loop () (do (shen.initialise_environment) (do (shen.prompt) (do (trap-error (shen.read-evaluate-print) (lambda E (pr (error-to-string E) (stoutput)))) (shen.loop)))))
 
 (defun shen.credits () (do (shen.prhush "
-Shen 2010, copyright (C) 2010 Mark Tarver
-" (stoutput)) (do (shen.prhush "released under the Shen license
+Shen, copyright (C) 2010-2015 Mark Tarver
 " (stoutput)) (do (shen.prhush (cn "www.shenlanguage.org, " (shen.app (value *version*) "
 " shen.a)) (stoutput)) (do (shen.prhush (cn "running under " (shen.app (value *language*) (cn ", implementation: " (shen.app (value *implementation*) "" shen.a)) shen.a)) (stoutput)) (shen.prhush (cn "
 port " (shen.app (value *port*) (cn " ported by " (shen.app (value *porters*) "
-" shen.a)) shen.a)) (stoutput)))))))
+" shen.a)) shen.a)) (stoutput))))))
 
 (defun shen.initialise_environment () (shen.multiple-set (cons shen.*call* (cons 0 (cons shen.*infs* (cons 0 (cons shen.*process-counter* (cons 0 (cons shen.*catch* (cons 0 ()))))))))))
 
-(defun shen.multiple-set (V2374) (cond ((= () V2374) ()) ((and (cons? V2374) (cons? (tl V2374))) (do (set (hd V2374) (hd (tl V2374))) (shen.multiple-set (tl (tl V2374))))) (true (shen.sys-error shen.multiple-set))))
+(defun shen.multiple-set (V2248) (cond ((= () V2248) ()) ((and (cons? V2248) (cons? (tl V2248))) (do (set (hd V2248) (hd (tl V2248))) (shen.multiple-set (tl (tl V2248))))) (true (shen.f_error shen.multiple-set))))
 
-(defun destroy (V2375) (declare V2375 symbol))
+(defun destroy (V2249) (declare V2249 symbol))
 
 (set shen.*history* ())
 
 (defun shen.read-evaluate-print () (let Lineread (shen.toplineread) (let History (value shen.*history*) (let NewLineread (shen.retrieve-from-history-if-needed Lineread History) (let NewHistory (shen.update_history NewLineread History) (let Parsed (fst NewLineread) (shen.toplevel Parsed)))))))
 
-(defun shen.retrieve-from-history-if-needed (V2385 V2386) (cond ((and (tuple? V2385) (and (cons? (snd V2385)) (element? (hd (snd V2385)) (cons (shen.space) (cons (shen.newline) ()))))) (shen.retrieve-from-history-if-needed (@p (fst V2385) (tl (snd V2385))) V2386)) ((and (tuple? V2385) (and (cons? (snd V2385)) (and (cons? (tl (snd V2385))) (and (= () (tl (tl (snd V2385)))) (and (cons? V2386) (and (= (hd (snd V2385)) (shen.exclamation)) (= (hd (tl (snd V2385))) (shen.exclamation)))))))) (let PastPrint (shen.prbytes (snd (hd V2386))) (hd V2386))) ((and (tuple? V2385) (and (cons? (snd V2385)) (= (hd (snd V2385)) (shen.exclamation)))) (let Key? (shen.make-key (tl (snd V2385)) V2386) (let Find (head (shen.find-past-inputs Key? V2386)) (let PastPrint (shen.prbytes (snd Find)) Find)))) ((and (tuple? V2385) (and (cons? (snd V2385)) (and (= () (tl (snd V2385))) (= (hd (snd V2385)) (shen.percent))))) (do (shen.print-past-inputs (lambda X true) (reverse V2386) 0) (abort))) ((and (tuple? V2385) (and (cons? (snd V2385)) (= (hd (snd V2385)) (shen.percent)))) (let Key? (shen.make-key (tl (snd V2385)) V2386) (let Pastprint (shen.print-past-inputs Key? (reverse V2386) 0) (abort)))) (true V2385)))
+(defun shen.retrieve-from-history-if-needed (V2259 V2260) (cond ((and (tuple? V2259) (and (cons? (snd V2259)) (element? (hd (snd V2259)) (cons (shen.space) (cons (shen.newline) ()))))) (shen.retrieve-from-history-if-needed (@p (fst V2259) (tl (snd V2259))) V2260)) ((and (tuple? V2259) (and (cons? (snd V2259)) (and (cons? (tl (snd V2259))) (and (= () (tl (tl (snd V2259)))) (and (cons? V2260) (and (= (hd (snd V2259)) (shen.exclamation)) (= (hd (tl (snd V2259))) (shen.exclamation)))))))) (let PastPrint (shen.prbytes (snd (hd V2260))) (hd V2260))) ((and (tuple? V2259) (and (cons? (snd V2259)) (= (hd (snd V2259)) (shen.exclamation)))) (let Key? (shen.make-key (tl (snd V2259)) V2260) (let Find (head (shen.find-past-inputs Key? V2260)) (let PastPrint (shen.prbytes (snd Find)) Find)))) ((and (tuple? V2259) (and (cons? (snd V2259)) (and (= () (tl (snd V2259))) (= (hd (snd V2259)) (shen.percent))))) (do (shen.print-past-inputs (lambda X true) (reverse V2260) 0) (abort))) ((and (tuple? V2259) (and (cons? (snd V2259)) (= (hd (snd V2259)) (shen.percent)))) (let Key? (shen.make-key (tl (snd V2259)) V2260) (let Pastprint (shen.print-past-inputs Key? (reverse V2260) 0) (abort)))) (true V2259)))
 
 (defun shen.percent () 37)
 
 (defun shen.exclamation () 33)
 
-(defun shen.prbytes (V2387) (do (map (lambda Byte (pr (n->string Byte) (stoutput))) V2387) (nl 1)))
+(defun shen.prbytes (V2261) (do (map (lambda Byte (pr (n->string Byte) (stoutput))) V2261) (nl 1)))
 
-(defun shen.update_history (V2388 V2389) (set shen.*history* (cons V2388 V2389)))
+(defun shen.update_history (V2262 V2263) (set shen.*history* (cons V2262 V2263)))
 
 (defun shen.toplineread () (shen.toplineread_loop (read-byte (stinput)) ()))
 
-(defun shen.toplineread_loop (V2391 V2392) (cond ((= V2391 (shen.hat)) (simple-error "line read aborted")) ((element? V2391 (cons (shen.newline) (cons (shen.carriage-return) ()))) (let Line (compile (lambda X2372 (shen.<st_input> X2372)) V2392 (lambda E shen.nextline)) (let It (shen.record-it V2392) (if (or (= Line shen.nextline) (empty? Line)) (shen.toplineread_loop (read-byte (stinput)) (append V2392 (cons V2391 ()))) (@p Line V2392))))) (true (shen.toplineread_loop (read-byte (stinput)) (append V2392 (cons V2391 ()))))))
+(defun shen.toplineread_loop (V2265 V2266) (cond ((= V2265 (shen.hat)) (simple-error "line read aborted")) ((element? V2265 (cons (shen.newline) (cons (shen.carriage-return) ()))) (let Line (compile (lambda V2246 (shen.<st_input> V2246)) V2266 (lambda E shen.nextline)) (let It (shen.record-it V2266) (if (or (= Line shen.nextline) (empty? Line)) (shen.toplineread_loop (read-byte (stinput)) (append V2266 (cons V2265 ()))) (@p Line V2266))))) (true (shen.toplineread_loop (read-byte (stinput)) (append V2266 (cons V2265 ()))))))
 
 (defun shen.hat () 94)
 
@@ -89,7 +64,7 @@ port " (shen.app (value *port*) (cn " ported by " (shen.app (value *porters*) "
 
 (defun shen.carriage-return () 13)
 
-(defun tc (V2397) (cond ((= + V2397) (set shen.*tc* true)) ((= - V2397) (set shen.*tc* false)) (true (simple-error "tc expects a + or -"))))
+(defun tc (V2271) (cond ((= + V2271) (set shen.*tc* true)) ((= - V2271) (set shen.*tc* false)) (true (simple-error "tc expects a + or -"))))
 
 (defun shen.prompt () (if (value shen.*tc*) (shen.prhush (cn "
 
@@ -97,16 +72,16 @@ port " (shen.app (value *port*) (cn " ported by " (shen.app (value *porters*) "
 
 (" (shen.app (length (value shen.*history*)) "-) " shen.a)) (stoutput))))
 
-(defun shen.toplevel (V2398) (shen.toplevel_evaluate V2398 (value shen.*tc*)))
+(defun shen.toplevel (V2272) (shen.toplevel_evaluate V2272 (value shen.*tc*)))
 
-(defun shen.find-past-inputs (V2399 V2400) (let F (shen.find V2399 V2400) (if (empty? F) (simple-error "input not found
+(defun shen.find-past-inputs (V2273 V2274) (let F (shen.find V2273 V2274) (if (empty? F) (simple-error "input not found
 ") F)))
 
-(defun shen.make-key (V2401 V2402) (let Atom (hd (compile (lambda X2373 (shen.<st_input> X2373)) V2401 (lambda E (if (cons? E) (simple-error (cn "parse error here: " (shen.app E "
+(defun shen.make-key (V2275 V2276) (let Atom (hd (compile (lambda V2247 (shen.<st_input> V2247)) V2275 (lambda E (if (cons? E) (simple-error (cn "parse error here: " (shen.app E "
 " shen.s))) (simple-error "parse error
-"))))) (if (integer? Atom) (lambda X (= X (nth (+ Atom 1) (reverse V2402)))) (lambda X (shen.prefix? V2401 (shen.trim-gubbins (snd X)))))))
+"))))) (if (integer? Atom) (lambda X (= X (nth (+ Atom 1) (reverse V2276)))) (lambda X (shen.prefix? V2275 (shen.trim-gubbins (snd X)))))))
 
-(defun shen.trim-gubbins (V2403) (cond ((and (cons? V2403) (= (hd V2403) (shen.space))) (shen.trim-gubbins (tl V2403))) ((and (cons? V2403) (= (hd V2403) (shen.newline))) (shen.trim-gubbins (tl V2403))) ((and (cons? V2403) (= (hd V2403) (shen.carriage-return))) (shen.trim-gubbins (tl V2403))) ((and (cons? V2403) (= (hd V2403) (shen.tab))) (shen.trim-gubbins (tl V2403))) ((and (cons? V2403) (= (hd V2403) (shen.left-round))) (shen.trim-gubbins (tl V2403))) (true V2403)))
+(defun shen.trim-gubbins (V2277) (cond ((and (cons? V2277) (= (hd V2277) (shen.space))) (shen.trim-gubbins (tl V2277))) ((and (cons? V2277) (= (hd V2277) (shen.newline))) (shen.trim-gubbins (tl V2277))) ((and (cons? V2277) (= (hd V2277) (shen.carriage-return))) (shen.trim-gubbins (tl V2277))) ((and (cons? V2277) (= (hd V2277) (shen.tab))) (shen.trim-gubbins (tl V2277))) ((and (cons? V2277) (= (hd V2277) (shen.left-round))) (shen.trim-gubbins (tl V2277))) (true V2277)))
 
 (defun shen.space () 32)
 
@@ -114,22 +89,22 @@ port " (shen.app (value *port*) (cn " ported by " (shen.app (value *porters*) "
 
 (defun shen.left-round () 40)
 
-(defun shen.find (V2410 V2411) (cond ((= () V2411) ()) ((and (cons? V2411) (V2410 (hd V2411))) (cons (hd V2411) (shen.find V2410 (tl V2411)))) ((cons? V2411) (shen.find V2410 (tl V2411))) (true (shen.sys-error shen.find))))
+(defun shen.find (V2284 V2285) (cond ((= () V2285) ()) ((and (cons? V2285) (V2284 (hd V2285))) (cons (hd V2285) (shen.find V2284 (tl V2285)))) ((cons? V2285) (shen.find V2284 (tl V2285))) (true (shen.f_error shen.find))))
 
-(defun shen.prefix? (V2422 V2423) (cond ((= () V2422) true) ((and (cons? V2422) (and (cons? V2423) (= (hd V2423) (hd V2422)))) (shen.prefix? (tl V2422) (tl V2423))) (true false)))
+(defun shen.prefix? (V2297 V2298) (cond ((= () V2297) true) ((and (cons? V2297) (and (cons? V2298) (= (hd V2298) (hd V2297)))) (shen.prefix? (tl V2297) (tl V2298))) (true false)))
 
-(defun shen.print-past-inputs (V2433 V2434 V2435) (cond ((= () V2434) _) ((and (cons? V2434) (not (V2433 (hd V2434)))) (shen.print-past-inputs V2433 (tl V2434) (+ V2435 1))) ((and (cons? V2434) (tuple? (hd V2434))) (do (shen.prhush (shen.app V2435 ". " shen.a) (stoutput)) (do (shen.prbytes (snd (hd V2434))) (shen.print-past-inputs V2433 (tl V2434) (+ V2435 1))))) (true (shen.sys-error shen.print-past-inputs))))
+(defun shen.print-past-inputs (V2307 V2308 V2309) (cond ((= () V2308) _) ((and (cons? V2308) (not (V2307 (hd V2308)))) (shen.print-past-inputs V2307 (tl V2308) (+ V2309 1))) ((and (cons? V2308) (tuple? (hd V2308))) (do (shen.prhush (shen.app V2309 ". " shen.a) (stoutput)) (do (shen.prbytes (snd (hd V2308))) (shen.print-past-inputs V2307 (tl V2308) (+ V2309 1))))) (true (shen.f_error shen.print-past-inputs))))
 
-(defun shen.toplevel_evaluate (V2436 V2437) (cond ((and (cons? V2436) (and (cons? (tl V2436)) (and (= : (hd (tl V2436))) (and (cons? (tl (tl V2436))) (and (= () (tl (tl (tl V2436)))) (= true V2437)))))) (shen.typecheck-and-evaluate (hd V2436) (hd (tl (tl V2436))))) ((and (cons? V2436) (cons? (tl V2436))) (do (shen.toplevel_evaluate (cons (hd V2436) ()) V2437) (do (nl 1) (shen.toplevel_evaluate (tl V2436) V2437)))) ((and (cons? V2436) (and (= () (tl V2436)) (= true V2437))) (shen.typecheck-and-evaluate (hd V2436) (gensym A))) ((and (cons? V2436) (and (= () (tl V2436)) (= false V2437))) (let Eval (shen.eval-without-macros (hd V2436)) (print Eval))) (true (shen.sys-error shen.toplevel_evaluate))))
+(defun shen.toplevel_evaluate (V2310 V2311) (cond ((and (cons? V2310) (and (cons? (tl V2310)) (and (= : (hd (tl V2310))) (and (cons? (tl (tl V2310))) (and (= () (tl (tl (tl V2310)))) (= true V2311)))))) (shen.typecheck-and-evaluate (hd V2310) (hd (tl (tl V2310))))) ((and (cons? V2310) (cons? (tl V2310))) (do (shen.toplevel_evaluate (cons (hd V2310) ()) V2311) (do (nl 1) (shen.toplevel_evaluate (tl V2310) V2311)))) ((and (cons? V2310) (and (= () (tl V2310)) (= true V2311))) (shen.typecheck-and-evaluate (hd V2310) (gensym A))) ((and (cons? V2310) (and (= () (tl V2310)) (= false V2311))) (let Eval (shen.eval-without-macros (hd V2310)) (print Eval))) (true (shen.f_error shen.toplevel_evaluate))))
 
-(defun shen.typecheck-and-evaluate (V2438 V2439) (let Typecheck (shen.typecheck V2438 V2439) (if (= Typecheck false) (simple-error "type error
-") (let Eval (shen.eval-without-macros V2438) (let Type (shen.pretty-type Typecheck) (shen.prhush (shen.app Eval (cn " : " (shen.app Type "" shen.r)) shen.s) (stoutput)))))))
+(defun shen.typecheck-and-evaluate (V2312 V2313) (let Typecheck (shen.typecheck V2312 V2313) (if (= Typecheck false) (simple-error "type error
+") (let Eval (shen.eval-without-macros V2312) (let Type (shen.pretty-type Typecheck) (shen.prhush (shen.app Eval (cn " : " (shen.app Type "" shen.r)) shen.s) (stoutput)))))))
 
-(defun shen.pretty-type (V2440) (shen.mult_subst (value shen.*alphabet*) (shen.extract-pvars V2440) V2440))
+(defun shen.pretty-type (V2314) (shen.mult_subst (value shen.*alphabet*) (shen.extract-pvars V2314) V2314))
 
-(defun shen.extract-pvars (V2445) (cond ((shen.pvar? V2445) (cons V2445 ())) ((cons? V2445) (union (shen.extract-pvars (hd V2445)) (shen.extract-pvars (tl V2445)))) (true ())))
+(defun shen.extract-pvars (V2319) (cond ((shen.pvar? V2319) (cons V2319 ())) ((cons? V2319) (union (shen.extract-pvars (hd V2319)) (shen.extract-pvars (tl V2319)))) (true ())))
 
-(defun shen.mult_subst (V2450 V2451 V2452) (cond ((= () V2450) V2452) ((= () V2451) V2452) ((and (cons? V2450) (cons? V2451)) (shen.mult_subst (tl V2450) (tl V2451) (subst (hd V2450) (hd V2451) V2452))) (true (shen.sys-error shen.mult_subst))))
+(defun shen.mult_subst (V2324 V2325 V2326) (cond ((= () V2324) V2326) ((= () V2325) V2326) ((and (cons? V2324) (cons? V2325)) (shen.mult_subst (tl V2324) (tl V2325) (subst (hd V2324) (hd V2325) V2326))) (true (shen.f_error shen.mult_subst))))
 
 
 

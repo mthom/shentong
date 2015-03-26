@@ -1,53 +1,29 @@
-"**********************************************************************************
-*                           The License						                                      *
-* 										                                                                  *
-* The user is free to produce commercial applications with the software, to 	          *
-* distribute these applications in source or binary  form, and to charge monies         *
-* for them as he sees fit and in concordance with the laws of the land subject 	        *
-* to the following license.							                                                *
-*										                                                                    * 
-* 1. The license applies to all the software and all derived software and 	            *
-*    must appear on such.							                                                  *
-*										                                                                    *
-* 2. It is illegal to distribute the software without this license attached	            *
-*    to it and use of the software implies agreement with the license as such.          *
-*    It is illegal for anyone who is not the copyright holder to tamper with 	          *
-*    or change the license.							                                                *
-*										                                                                    *
-* 3. Neither the names of Lambda Associates or the copyright holder may be used         *
-*    to endorse or promote products built using the software without specific 	        *
-*    prior written permission from the copyright holder.		                            *
-*										                                                                    *
-* 4. That possession of this license does not confer on the copyright holder 	          *
-*    any special contractual obligation towards the user. That in no event 	            * 
-*    shall the copyright holder be liable for any direct, indirect, incidental,        *   
-*    special, exemplary or consequential damages (including but not limited             *
-*    to procurement of substitute goods or services, loss of use, data, 	              * 
-*    interruption), however caused and on any theory of liability, whether in	          * 
-*    contract, strict liability or tort (including negligence) arising in any         	*
-*    way out of the use of the software, even if advised of the possibility of         	*
-*    such damage.						                                                        		* 
-*										                                                                    *
-* 5. It is permitted for the user to change the software, for the purpose of 	          *
-*    improving performance, correcting an error, or porting to a new platform, 	        *
-*    and distribute the derived version of Shen provided the resulting program 	        *
-*    conforms in all respects to the Shen standard and is issued under that             * 
-*    title. The user must make it clear with his distribution that he/she is 	          *
-*    the author of the changes and what these changes are and why. 		                  *
-*										                                                                    *
-* 6. Derived versions of this software in whatever form are subject to the same         *
-*    restrictions. In particular it is not permitted to make derived copies of          *
-*    this software which do not conform to the Shen standard or appear under a          *
-*    different title.								                                                    *
-*										                                                                    *
-*    It is permitted to distribute versions of Shen which incorporate libraries,        *
-*    graphics or other facilities which are not part of the Shen standard.	            *
-*										                                                                    *
-* For an explication of this license see www.shenlanguage.org/license.htm which         *
-* explains this license in full.                                                        *
-*				 						                                                                    *
-*****************************************************************************************
-"(set shen.*installing-kl* false)
+"Copyright (c) 2015, Mark Tarver
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of Mark Tarver may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY Mark Tarver ''AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL Mark Tarver BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+
+(set shen.*installing-kl* false)
 
 (set shen.*history* ())
 
@@ -61,7 +37,9 @@
 
 (set shen.*prologvectors* (vector 1000))
 
-(set shen.*reader-macros* ())
+(set shen.*macroreg* (cons shen.timer-macro (cons shen.cases-macro (cons shen.abs-macro (cons shen.put/get-macro (cons shen.compile-macro (cons shen.datatype-macro (cons shen.let-macro (cons shen.assoc-macro (cons shen.make-string-macro (cons shen.output-macro (cons shen.input-macro (cons shen.error-macro (cons shen.prolog-macro (cons shen.synonyms-macro (cons shen.nl-macro (cons shen.@s-macro (cons shen.defprolog-macro (cons shen.function-macro ())))))))))))))))))))
+
+(set *macros* (cons (lambda X (shen.timer-macro X)) (cons (lambda X (shen.cases-macro X)) (cons (lambda X (shen.abs-macro X)) (cons (lambda X (shen.put/get-macro X)) (cons (lambda X (shen.compile-macro X)) (cons (lambda X (shen.datatype-macro X)) (cons (lambda X (shen.let-macro X)) (cons (lambda X (shen.assoc-macro X)) (cons (lambda X (shen.make-string-macro X)) (cons (lambda X (shen.output-macro X)) (cons (lambda X (shen.input-macro X)) (cons (lambda X (shen.error-macro X)) (cons (lambda X (shen.prolog-macro X)) (cons (lambda X (shen.synonyms-macro X)) (cons (lambda X (shen.nl-macro X)) (cons (lambda X (shen.@s-macro X)) (cons (lambda X (shen.defprolog-macro X)) (cons (lambda X (shen.function-macro X)) ())))))))))))))))))))
 
 (set *home-directory* ())
 
@@ -75,7 +53,7 @@
 
 (set shen.*special* (cons @p (cons @s (cons @v (cons cons (cons lambda (cons let (cons where (cons set (cons open ()))))))))))
 
-(set shen.*extraspecial* (cons define (cons shen.process-datatype (cons input+ (cons defcc (cons read+ (cons defmacro ())))))))
+(set shen.*extraspecial* (cons define (cons shen.process-datatype (cons input+ (cons defcc (cons shen.read+ (cons defmacro ())))))))
 
 (set shen.*spy* false)
 
@@ -109,23 +87,23 @@
 
 (set shen.*optimise* false)
 
-(set *version* "version 16")
+(set *version* "Shen 17.3")
 
-(defun shen.initialise_arity_table (V827) (cond ((= () V827) ()) ((and (cons? V827) (cons? (tl V827))) (let DecArity (put (hd V827) arity (hd (tl V827)) (value *property-vector*)) (shen.initialise_arity_table (tl (tl V827))))) (true (shen.sys-error shen.initialise_arity_table))))
+(defun shen.initialise_arity_table (V726) (cond ((= () V726) ()) ((and (cons? V726) (cons? (tl V726))) (let DecArity (put (hd V726) arity (hd (tl V726)) (value *property-vector*)) (shen.initialise_arity_table (tl (tl V726))))) (true (shen.f_error shen.initialise_arity_table))))
 
-(defun arity (V828) (trap-error (get V828 arity (value *property-vector*)) (lambda E -1)))
+(defun arity (V727) (trap-error (get V727 arity (value *property-vector*)) (lambda E -1)))
 
-(shen.initialise_arity_table (cons absvector (cons 1 (cons adjoin (cons 2 (cons and (cons 2 (cons append (cons 2 (cons arity (cons 1 (cons assoc (cons 2 (cons boolean? (cons 1 (cons cd (cons 1 (cons compile (cons 3 (cons concat (cons 2 (cons cons (cons 2 (cons cons? (cons 1 (cons cn (cons 2 (cons declare (cons 2 (cons destroy (cons 1 (cons difference (cons 2 (cons do (cons 2 (cons element? (cons 2 (cons empty? (cons 1 (cons enable-type-theory (cons 1 (cons interror (cons 2 (cons eval (cons 1 (cons eval-kl (cons 1 (cons explode (cons 1 (cons external (cons 1 (cons fail-if (cons 2 (cons fail (cons 0 (cons fix (cons 2 (cons findall (cons 5 (cons freeze (cons 1 (cons fst (cons 1 (cons gensym (cons 1 (cons get (cons 3 (cons get-time (cons 1 (cons address-> (cons 3 (cons <-address (cons 2 (cons <-vector (cons 2 (cons > (cons 2 (cons >= (cons 2 (cons = (cons 2 (cons hd (cons 1 (cons hdv (cons 1 (cons hdstr (cons 1 (cons head (cons 1 (cons if (cons 3 (cons integer? (cons 1 (cons intern (cons 1 (cons identical (cons 4 (cons inferences (cons 0 (cons input (cons 1 (cons input+ (cons 2 (cons implementation (cons 0 (cons intersection (cons 2 (cons it (cons 0 (cons kill (cons 0 (cons language (cons 0 (cons length (cons 1 (cons lineread (cons 1 (cons load (cons 1 (cons < (cons 2 (cons <= (cons 2 (cons vector (cons 1 (cons macroexpand (cons 1 (cons map (cons 2 (cons mapcan (cons 2 (cons maxinferences (cons 1 (cons not (cons 1 (cons nth (cons 2 (cons n->string (cons 1 (cons number? (cons 1 (cons occurs-check (cons 1 (cons occurrences (cons 2 (cons occurs-check (cons 1 (cons optimise (cons 1 (cons or (cons 2 (cons os (cons 0 (cons package (cons 3 (cons port (cons 0 (cons porters (cons 0 (cons pos (cons 2 (cons print (cons 1 (cons profile (cons 1 (cons profile-results (cons 1 (cons pr (cons 2 (cons ps (cons 1 (cons preclude (cons 1 (cons preclude-all-but (cons 1 (cons protect (cons 1 (cons address-> (cons 3 (cons put (cons 4 (cons shen.reassemble (cons 2 (cons read-file-as-string (cons 1 (cons read-file (cons 1 (cons read (cons 1 (cons read-byte (cons 1 (cons read-from-string (cons 1 (cons release (cons 0 (cons remove (cons 2 (cons reverse (cons 1 (cons set (cons 2 (cons simple-error (cons 1 (cons snd (cons 1 (cons specialise (cons 1 (cons spy (cons 1 (cons step (cons 1 (cons stinput (cons 0 (cons stoutput (cons 0 (cons string->n (cons 1 (cons string->symbol (cons 1 (cons string? (cons 1 (cons shen.strong-warning (cons 1 (cons subst (cons 3 (cons sum (cons 1 (cons symbol? (cons 1 (cons tail (cons 1 (cons tl (cons 1 (cons tc (cons 1 (cons tc? (cons 0 (cons thaw (cons 1 (cons tlstr (cons 1 (cons track (cons 1 (cons trap-error (cons 2 (cons tuple? (cons 1 (cons type (cons 2 (cons return (cons 3 (cons undefmacro (cons 1 (cons unprofile (cons 1 (cons unify (cons 4 (cons unify! (cons 4 (cons union (cons 2 (cons untrack (cons 1 (cons unspecialise (cons 1 (cons undefmacro (cons 1 (cons vector (cons 1 (cons vector-> (cons 3 (cons value (cons 1 (cons variable? (cons 1 (cons version (cons 0 (cons warn (cons 1 (cons write-byte (cons 2 (cons write-to-file (cons 2 (cons y-or-n? (cons 1 (cons + (cons 2 (cons * (cons 2 (cons / (cons 2 (cons - (cons 2 (cons == (cons 2 (cons <e> (cons 1 (cons @p (cons 2 (cons @v (cons 2 (cons @s (cons 2 (cons preclude (cons 1 (cons include (cons 1 (cons preclude-all-but (cons 1 (cons include-all-but (cons 1 (cons where (cons 2 ())))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+(shen.initialise_arity_table (cons absvector (cons 1 (cons adjoin (cons 2 (cons and (cons 2 (cons append (cons 2 (cons arity (cons 1 (cons assoc (cons 2 (cons boolean? (cons 1 (cons cd (cons 1 (cons compile (cons 3 (cons concat (cons 2 (cons cons (cons 2 (cons cons? (cons 1 (cons cn (cons 2 (cons declare (cons 2 (cons destroy (cons 1 (cons difference (cons 2 (cons do (cons 2 (cons element? (cons 2 (cons empty? (cons 1 (cons enable-type-theory (cons 1 (cons shen.interror (cons 2 (cons eval (cons 1 (cons eval-kl (cons 1 (cons explode (cons 1 (cons external (cons 1 (cons fail-if (cons 2 (cons fail (cons 0 (cons fix (cons 2 (cons findall (cons 5 (cons freeze (cons 1 (cons fst (cons 1 (cons gensym (cons 1 (cons get (cons 3 (cons get-time (cons 1 (cons address-> (cons 3 (cons <-address (cons 2 (cons <-vector (cons 2 (cons > (cons 2 (cons >= (cons 2 (cons = (cons 2 (cons hd (cons 1 (cons hdv (cons 1 (cons hdstr (cons 1 (cons head (cons 1 (cons if (cons 3 (cons integer? (cons 1 (cons intern (cons 1 (cons identical (cons 4 (cons inferences (cons 0 (cons input (cons 1 (cons input+ (cons 2 (cons implementation (cons 0 (cons intersection (cons 2 (cons it (cons 0 (cons kill (cons 0 (cons language (cons 0 (cons length (cons 1 (cons lineread (cons 1 (cons load (cons 1 (cons < (cons 2 (cons <= (cons 2 (cons vector (cons 1 (cons macroexpand (cons 1 (cons map (cons 2 (cons mapcan (cons 2 (cons maxinferences (cons 1 (cons not (cons 1 (cons nth (cons 2 (cons n->string (cons 1 (cons number? (cons 1 (cons occurs-check (cons 1 (cons occurrences (cons 2 (cons occurs-check (cons 1 (cons optimise (cons 1 (cons or (cons 2 (cons os (cons 0 (cons package (cons 3 (cons package? (cons 1 (cons port (cons 0 (cons porters (cons 0 (cons pos (cons 2 (cons print (cons 1 (cons profile (cons 1 (cons profile-results (cons 1 (cons pr (cons 2 (cons ps (cons 1 (cons preclude (cons 1 (cons preclude-all-but (cons 1 (cons protect (cons 1 (cons address-> (cons 3 (cons put (cons 4 (cons shen.reassemble (cons 2 (cons read-file-as-string (cons 1 (cons read-file (cons 1 (cons read (cons 1 (cons read-byte (cons 1 (cons read-from-string (cons 1 (cons release (cons 0 (cons remove (cons 2 (cons require (cons 3 (cons reverse (cons 1 (cons set (cons 2 (cons simple-error (cons 1 (cons snd (cons 1 (cons specialise (cons 1 (cons spy (cons 1 (cons step (cons 1 (cons stinput (cons 0 (cons stoutput (cons 0 (cons string->n (cons 1 (cons string->symbol (cons 1 (cons string? (cons 1 (cons subst (cons 3 (cons sum (cons 1 (cons symbol? (cons 1 (cons tail (cons 1 (cons tl (cons 1 (cons tc (cons 1 (cons tc? (cons 0 (cons thaw (cons 1 (cons tlstr (cons 1 (cons track (cons 1 (cons trap-error (cons 2 (cons tuple? (cons 1 (cons type (cons 2 (cons return (cons 3 (cons undefmacro (cons 1 (cons unput (cons 3 (cons unprofile (cons 1 (cons unify (cons 4 (cons unify! (cons 4 (cons union (cons 2 (cons untrack (cons 1 (cons unspecialise (cons 1 (cons undefmacro (cons 1 (cons vector (cons 1 (cons vector-> (cons 3 (cons value (cons 1 (cons variable? (cons 1 (cons version (cons 0 (cons write-byte (cons 2 (cons write-to-file (cons 2 (cons y-or-n? (cons 1 (cons + (cons 2 (cons * (cons 2 (cons / (cons 2 (cons - (cons 2 (cons == (cons 2 (cons <e> (cons 1 (cons @p (cons 2 (cons @v (cons 2 (cons @s (cons 2 (cons preclude (cons 1 (cons include (cons 1 (cons preclude-all-but (cons 1 (cons include-all-but (cons 1 (cons where (cons 2 ())))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 
-(defun systemf (V829) (let Shen (intern "shen") (let External (get Shen shen.external-symbols (value *property-vector*)) (put Shen shen.external-symbols (adjoin V829 External) (value *property-vector*)))))
+(defun systemf (V728) (let Shen (intern "shen") (let External (get Shen shen.external-symbols (value *property-vector*)) (let Place (put Shen shen.external-symbols (adjoin V728 External) (value *property-vector*)) V728))))
 
-(defun adjoin (V830 V831) (if (element? V830 V831) V831 (cons V830 V831)))
+(defun adjoin (V729 V730) (if (element? V729 V730) V730 (cons V729 V730)))
 
-(put (intern "shen") shen.external-symbols (cons ! (cons } (cons { (cons --> (cons <-- (cons && (cons : (cons ; (cons :- (cons := (cons _ (cons *language* (cons *implementation* (cons *stinput* (cons *home-directory* (cons *version* (cons *maximum-print-sequence-size* (cons *macros* (cons *os* (cons *release* (cons *property-vector* (cons @v (cons @p (cons @s (cons *port* (cons *porters* (cons *hush* (cons <- (cons -> (cons <e> (cons == (cons = (cons >= (cons > (cons /. (cons =! (cons $ (cons - (cons / (cons * (cons + (cons <= (cons < (cons >> (cons (vector 0) (cons ==> (cons y-or-n? (cons write-to-file (cons write-byte (cons where (cons when (cons warn (cons version (cons verified (cons variable? (cons value (cons vector-> (cons <-vector (cons vector (cons vector? (cons unspecialise (cons untrack (cons unit (cons shen.unix (cons union (cons unify (cons unify! (cons unprofile (cons undefmacro (cons return (cons type (cons tuple? (cons true (cons trap-error (cons track (cons time (cons thaw (cons tc? (cons tc (cons tl (cons tlstr (cons tlv (cons tail (cons systemf (cons synonyms (cons symbol (cons symbol? (cons string->symbol (cons subst (cons string? (cons string->n (cons stream (cons string (cons stinput (cons stoutput (cons step (cons spy (cons specialise (cons snd (cons simple-error (cons set (cons save (cons str (cons run (cons reverse (cons remove (cons release (cons read (cons read-file (cons read-file-as-bytelist (cons read-file-as-string (cons read-byte (cons read-from-string (cons quit (cons put (cons preclude (cons preclude-all-but (cons ps (cons prolog? (cons protect (cons profile-results (cons profile (cons print (cons pr (cons pos (cons porters (cons port (cons package (cons output (cons out (cons os (cons or (cons optimise (cons open (cons occurrences (cons occurs-check (cons n->string (cons number? (cons number (cons null (cons nth (cons not (cons nl (cons mode (cons macro (cons macroexpand (cons maxinferences (cons mapcan (cons map (cons make-string (cons load (cons loaded (cons list (cons lineread (cons limit (cons length (cons let (cons lazy (cons lambda (cons language (cons kill (cons is (cons intersection (cons inferences (cons intern (cons integer? (cons input (cons input+ (cons include (cons include-all-but (cons it (cons in (cons implementation (cons if (cons identical (cons head (cons hd (cons hdv (cons hdstr (cons hash (cons get (cons get-time (cons gensym (cons function (cons fst (cons freeze (cons fix (cons file (cons fail (cons fail-if (cons fwhen (cons findall (cons false (cons enable-type-theory (cons explode (cons external (cons exception (cons eval-kl (cons eval (cons error-to-string (cons error (cons empty? (cons element? (cons do (cons difference (cons destroy (cons defun (cons define (cons defmacro (cons defcc (cons defprolog (cons declare (cons datatype (cons cut (cons cn (cons cons? (cons cons (cons cond (cons concat (cons compile (cons cd (cons cases (cons call (cons close (cons bind (cons bound? (cons boolean? (cons boolean (cons bar! (cons assoc (cons arity (cons append (cons and (cons adjoin (cons <-address (cons address-> (cons absvector? (cons absvector (cons abort ()))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) (value *property-vector*))
+(put (intern "shen") shen.external-symbols (cons ! (cons } (cons { (cons --> (cons <-- (cons && (cons : (cons ; (cons :- (cons := (cons _ (cons *language* (cons *implementation* (cons *stinput* (cons *stoutput* (cons *home-directory* (cons *version* (cons *maximum-print-sequence-size* (cons *macros* (cons *os* (cons *release* (cons *property-vector* (cons @v (cons @p (cons @s (cons *port* (cons *porters* (cons *hush* (cons <- (cons -> (cons <e> (cons == (cons = (cons >= (cons > (cons /. (cons =! (cons $ (cons - (cons / (cons * (cons + (cons <= (cons < (cons >> (cons (vector 0) (cons y-or-n? (cons write-to-file (cons write-byte (cons where (cons when (cons warn (cons version (cons verified (cons variable? (cons value (cons vector-> (cons <-vector (cons vector (cons vector? (cons unspecialise (cons untrack (cons unit (cons shen.unix (cons union (cons unify (cons unify! (cons unput (cons unprofile (cons undefmacro (cons return (cons type (cons tuple? (cons true (cons trap-error (cons track (cons time (cons thaw (cons tc? (cons tc (cons tl (cons tlstr (cons tlv (cons tail (cons systemf (cons synonyms (cons symbol (cons symbol? (cons string->symbol (cons sum (cons subst (cons string? (cons string->n (cons stream (cons string (cons stinput (cons stoutput (cons step (cons spy (cons specialise (cons snd (cons simple-error (cons set (cons save (cons str (cons run (cons reverse (cons remove (cons release (cons read (cons read-file (cons require (cons read-file-as-bytelist (cons read-file-as-string (cons read-byte (cons read-from-string (cons package? (cons put (cons preclude (cons preclude-all-but (cons ps (cons prolog? (cons protect (cons profile-results (cons profile (cons print (cons pr (cons pos (cons porters (cons port (cons package (cons output (cons out (cons os (cons or (cons optimise (cons open (cons occurrences (cons occurs-check (cons n->string (cons number? (cons number (cons null (cons nth (cons not (cons nl (cons mode (cons macroexpand (cons maxinferences (cons mapcan (cons map (cons make-string (cons load (cons loaded (cons list (cons lineread (cons limit (cons length (cons let (cons lazy (cons lambda (cons language (cons kill (cons is (cons intersection (cons inferences (cons intern (cons integer? (cons input (cons input+ (cons include (cons include-all-but (cons it (cons in (cons implementation (cons if (cons identical (cons head (cons hd (cons hdv (cons hdstr (cons hash (cons get (cons get-time (cons gensym (cons function (cons fst (cons freeze (cons fix (cons file (cons fail (cons fail-if (cons fwhen (cons findall (cons false (cons enable-type-theory (cons explode (cons external (cons exception (cons eval-kl (cons eval (cons error-to-string (cons error (cons empty? (cons element? (cons do (cons difference (cons destroy (cons defun (cons define (cons defmacro (cons defcc (cons defprolog (cons declare (cons datatype (cons cut (cons cn (cons cons? (cons cons (cons cond (cons concat (cons compile (cons cd (cons cases (cons call (cons close (cons bind (cons bound? (cons boolean? (cons boolean (cons bar! (cons assoc (cons arity (cons append (cons and (cons adjoin (cons <-address (cons address-> (cons absvector? (cons absvector (cons abort ()))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) (value *property-vector*))
 
-(defun specialise (V832) (do (set shen.*special* (cons V832 (value shen.*special*))) V832))
+(defun specialise (V731) (do (set shen.*special* (cons V731 (value shen.*special*))) V731))
 
-(defun unspecialise (V833) (do (set shen.*special* (remove V833 (value shen.*special*))) V833))
+(defun unspecialise (V732) (do (set shen.*special* (remove V732 (value shen.*special*))) V732))
 
 
 

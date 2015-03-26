@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings #-}
@@ -113,10 +114,10 @@ data KLValue = Atom !Atom
              | List ![KLValue]
              | OutStream !Handle
              | Vec {-# UNPACK #-} !(Vector KLValue)
-             deriving Show
+             deriving (Show)
 
-data ApplContext = Func Function
-                 | PL (KLContext Env KLValue)
+data ApplContext = Func Symbol Function
+                 | PL Symbol (KLContext Env KLValue)
                  | Malformed ErrorMsg
 
 instance Show ApplContext where
@@ -142,12 +143,10 @@ instance Monad (KLContext s) where
 klcBind :: KLContext s a -> (a -> KLContext s b) -> KLContext s b
 klcBind m f = KLContext go
   where go sk fk s = runKLC m (\a s' -> runKLC (f a) sk fk s') fk s
-{-# INLINE klcBind #-}
 
 klcReturn :: a -> KLContext s a
 klcReturn a = KLContext go
   where go sk _ s = sk a s
-{-# INLINE klcReturn #-}
 
 instance Applicative (KLContext s) where
     pure = return
@@ -163,7 +162,6 @@ instance MonadState s (KLContext s) where
 liftIO' m = KLContext $ \sk fk s -> do
               x <- m
               sk x s
-{-# INLINE liftIO' #-}
 
 instance MonadIO (KLContext s) where
     liftIO = liftIO'

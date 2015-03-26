@@ -1,164 +1,140 @@
-"**********************************************************************************
-*                           The License						                                      *
-* 										                                                                  *
-* The user is free to produce commercial applications with the software, to 	          *
-* distribute these applications in source or binary  form, and to charge monies         *
-* for them as he sees fit and in concordance with the laws of the land subject 	        *
-* to the following license.							                                                *
-*										                                                                    * 
-* 1. The license applies to all the software and all derived software and 	            *
-*    must appear on such.							                                                  *
-*										                                                                    *
-* 2. It is illegal to distribute the software without this license attached	            *
-*    to it and use of the software implies agreement with the license as such.          *
-*    It is illegal for anyone who is not the copyright holder to tamper with 	          *
-*    or change the license.							                                                *
-*										                                                                    *
-* 3. Neither the names of Lambda Associates or the copyright holder may be used         *
-*    to endorse or promote products built using the software without specific 	        *
-*    prior written permission from the copyright holder.		                            *
-*										                                                                    *
-* 4. That possession of this license does not confer on the copyright holder 	          *
-*    any special contractual obligation towards the user. That in no event 	            * 
-*    shall the copyright holder be liable for any direct, indirect, incidental,        *   
-*    special, exemplary or consequential damages (including but not limited             *
-*    to procurement of substitute goods or services, loss of use, data, 	              * 
-*    interruption), however caused and on any theory of liability, whether in	          * 
-*    contract, strict liability or tort (including negligence) arising in any         	*
-*    way out of the use of the software, even if advised of the possibility of         	*
-*    such damage.						                                                        		* 
-*										                                                                    *
-* 5. It is permitted for the user to change the software, for the purpose of 	          *
-*    improving performance, correcting an error, or porting to a new platform, 	        *
-*    and distribute the derived version of Shen provided the resulting program 	        *
-*    conforms in all respects to the Shen standard and is issued under that             * 
-*    title. The user must make it clear with his distribution that he/she is 	          *
-*    the author of the changes and what these changes are and why. 		                  *
-*										                                                                    *
-* 6. Derived versions of this software in whatever form are subject to the same         *
-*    restrictions. In particular it is not permitted to make derived copies of          *
-*    this software which do not conform to the Shen standard or appear under a          *
-*    different title.								                                                    *
-*										                                                                    *
-*    It is permitted to distribute versions of Shen which incorporate libraries,        *
-*    graphics or other facilities which are not part of the Shen standard.	            *
-*										                                                                    *
-* For an explication of this license see www.shenlanguage.org/license.htm which         *
-* explains this license in full.                                                        *
-*				 						                                                                    *
-*****************************************************************************************
-"(defun shen.datatype-error (V1686) (cond ((and (cons? V1686) (and (cons? (tl V1686)) (= () (tl (tl V1686))))) (simple-error (cn "datatype syntax error here:
+"Copyright (c) 2015, Mark Tarver
 
- " (shen.app (shen.next-50 50 (hd V1686)) "
-" shen.a)))) (true (shen.sys-error shen.datatype-error))))
+All rights reserved.
 
-(defun shen.<datatype-rules> (V1691) (let Result (let Parse_shen.<datatype-rule> (shen.<datatype-rule> V1691) (if (not (= (fail) Parse_shen.<datatype-rule>)) (let Parse_shen.<datatype-rules> (shen.<datatype-rules> Parse_shen.<datatype-rule>) (if (not (= (fail) Parse_shen.<datatype-rules>)) (shen.pair (hd Parse_shen.<datatype-rules>) (cons (shen.hdtl Parse_shen.<datatype-rule>) (shen.hdtl Parse_shen.<datatype-rules>))) (fail))) (fail))) (if (= Result (fail)) (let Result (let Parse_<e> (<e> V1691) (if (not (= (fail) Parse_<e>)) (shen.pair (hd Parse_<e>) ()) (fail))) (if (= Result (fail)) (fail) Result)) Result)))
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of Mark Tarver may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
 
-(defun shen.<datatype-rule> (V1696) (let Result (let Parse_shen.<side-conditions> (shen.<side-conditions> V1696) (if (not (= (fail) Parse_shen.<side-conditions>)) (let Parse_shen.<premises> (shen.<premises> Parse_shen.<side-conditions>) (if (not (= (fail) Parse_shen.<premises>)) (let Parse_shen.<singleunderline> (shen.<singleunderline> Parse_shen.<premises>) (if (not (= (fail) Parse_shen.<singleunderline>)) (let Parse_shen.<conclusion> (shen.<conclusion> Parse_shen.<singleunderline>) (if (not (= (fail) Parse_shen.<conclusion>)) (shen.pair (hd Parse_shen.<conclusion>) (shen.sequent shen.single (cons (shen.hdtl Parse_shen.<side-conditions>) (cons (shen.hdtl Parse_shen.<premises>) (cons (shen.hdtl Parse_shen.<conclusion>) ()))))) (fail))) (fail))) (fail))) (fail))) (if (= Result (fail)) (let Result (let Parse_shen.<side-conditions> (shen.<side-conditions> V1696) (if (not (= (fail) Parse_shen.<side-conditions>)) (let Parse_shen.<premises> (shen.<premises> Parse_shen.<side-conditions>) (if (not (= (fail) Parse_shen.<premises>)) (let Parse_shen.<doubleunderline> (shen.<doubleunderline> Parse_shen.<premises>) (if (not (= (fail) Parse_shen.<doubleunderline>)) (let Parse_shen.<conclusion> (shen.<conclusion> Parse_shen.<doubleunderline>) (if (not (= (fail) Parse_shen.<conclusion>)) (shen.pair (hd Parse_shen.<conclusion>) (shen.sequent shen.double (cons (shen.hdtl Parse_shen.<side-conditions>) (cons (shen.hdtl Parse_shen.<premises>) (cons (shen.hdtl Parse_shen.<conclusion>) ()))))) (fail))) (fail))) (fail))) (fail))) (if (= Result (fail)) (fail) Result)) Result)))
+THIS SOFTWARE IS PROVIDED BY Mark Tarver ''AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL Mark Tarver BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 
-(defun shen.<side-conditions> (V1701) (let Result (let Parse_shen.<side-condition> (shen.<side-condition> V1701) (if (not (= (fail) Parse_shen.<side-condition>)) (let Parse_shen.<side-conditions> (shen.<side-conditions> Parse_shen.<side-condition>) (if (not (= (fail) Parse_shen.<side-conditions>)) (shen.pair (hd Parse_shen.<side-conditions>) (cons (shen.hdtl Parse_shen.<side-condition>) (shen.hdtl Parse_shen.<side-conditions>))) (fail))) (fail))) (if (= Result (fail)) (let Result (let Parse_<e> (<e> V1701) (if (not (= (fail) Parse_<e>)) (shen.pair (hd Parse_<e>) ()) (fail))) (if (= Result (fail)) (fail) Result)) Result)))
+(defun shen.datatype-error (V1370) (cond ((and (cons? V1370) (and (cons? (tl V1370)) (= () (tl (tl V1370))))) (simple-error (cn "datatype syntax error here:
 
-(defun shen.<side-condition> (V1706) (let Result (if (and (cons? (hd V1706)) (= if (hd (hd V1706)))) (let Parse_shen.<expr> (shen.<expr> (shen.pair (tl (hd V1706)) (shen.hdtl V1706))) (if (not (= (fail) Parse_shen.<expr>)) (shen.pair (hd Parse_shen.<expr>) (cons if (cons (shen.hdtl Parse_shen.<expr>) ()))) (fail))) (fail)) (if (= Result (fail)) (let Result (if (and (cons? (hd V1706)) (= let (hd (hd V1706)))) (let Parse_shen.<variable?> (shen.<variable?> (shen.pair (tl (hd V1706)) (shen.hdtl V1706))) (if (not (= (fail) Parse_shen.<variable?>)) (let Parse_shen.<expr> (shen.<expr> Parse_shen.<variable?>) (if (not (= (fail) Parse_shen.<expr>)) (shen.pair (hd Parse_shen.<expr>) (cons let (cons (shen.hdtl Parse_shen.<variable?>) (cons (shen.hdtl Parse_shen.<expr>) ())))) (fail))) (fail))) (fail)) (if (= Result (fail)) (fail) Result)) Result)))
+ " (shen.app (shen.next-50 50 (hd V1370)) "
+" shen.a)))) (true (shen.f_error shen.datatype-error))))
 
-(defun shen.<variable?> (V1711) (let Result (if (cons? (hd V1711)) (let Parse_X (hd (hd V1711)) (if (variable? Parse_X) (shen.pair (hd (shen.pair (tl (hd V1711)) (shen.hdtl V1711))) Parse_X) (fail))) (fail)) (if (= Result (fail)) (fail) Result)))
+(defun shen.<datatype-rules> (V1371) (let YaccParse (let Parse_shen.<datatype-rule> (shen.<datatype-rule> V1371) (if (not (= (fail) Parse_shen.<datatype-rule>)) (let Parse_shen.<datatype-rules> (shen.<datatype-rules> Parse_shen.<datatype-rule>) (if (not (= (fail) Parse_shen.<datatype-rules>)) (shen.pair (hd Parse_shen.<datatype-rules>) (cons (shen.hdtl Parse_shen.<datatype-rule>) (shen.hdtl Parse_shen.<datatype-rules>))) (fail))) (fail))) (if (= YaccParse (fail)) (let Parse_<e> (<e> V1371) (if (not (= (fail) Parse_<e>)) (shen.pair (hd Parse_<e>) ()) (fail))) YaccParse)))
 
-(defun shen.<expr> (V1716) (let Result (if (cons? (hd V1716)) (let Parse_X (hd (hd V1716)) (if (not (or (element? Parse_X (cons >> (cons ; ()))) (or (shen.singleunderline? Parse_X) (shen.doubleunderline? Parse_X)))) (shen.pair (hd (shen.pair (tl (hd V1716)) (shen.hdtl V1716))) (shen.remove-bar Parse_X)) (fail))) (fail)) (if (= Result (fail)) (fail) Result)))
+(defun shen.<datatype-rule> (V1372) (let YaccParse (let Parse_shen.<side-conditions> (shen.<side-conditions> V1372) (if (not (= (fail) Parse_shen.<side-conditions>)) (let Parse_shen.<premises> (shen.<premises> Parse_shen.<side-conditions>) (if (not (= (fail) Parse_shen.<premises>)) (let Parse_shen.<singleunderline> (shen.<singleunderline> Parse_shen.<premises>) (if (not (= (fail) Parse_shen.<singleunderline>)) (let Parse_shen.<conclusion> (shen.<conclusion> Parse_shen.<singleunderline>) (if (not (= (fail) Parse_shen.<conclusion>)) (shen.pair (hd Parse_shen.<conclusion>) (shen.sequent shen.single (cons (shen.hdtl Parse_shen.<side-conditions>) (cons (shen.hdtl Parse_shen.<premises>) (cons (shen.hdtl Parse_shen.<conclusion>) ()))))) (fail))) (fail))) (fail))) (fail))) (if (= YaccParse (fail)) (let Parse_shen.<side-conditions> (shen.<side-conditions> V1372) (if (not (= (fail) Parse_shen.<side-conditions>)) (let Parse_shen.<premises> (shen.<premises> Parse_shen.<side-conditions>) (if (not (= (fail) Parse_shen.<premises>)) (let Parse_shen.<doubleunderline> (shen.<doubleunderline> Parse_shen.<premises>) (if (not (= (fail) Parse_shen.<doubleunderline>)) (let Parse_shen.<conclusion> (shen.<conclusion> Parse_shen.<doubleunderline>) (if (not (= (fail) Parse_shen.<conclusion>)) (shen.pair (hd Parse_shen.<conclusion>) (shen.sequent shen.double (cons (shen.hdtl Parse_shen.<side-conditions>) (cons (shen.hdtl Parse_shen.<premises>) (cons (shen.hdtl Parse_shen.<conclusion>) ()))))) (fail))) (fail))) (fail))) (fail))) YaccParse)))
 
-(defun shen.remove-bar (V1717) (cond ((and (cons? V1717) (and (cons? (tl V1717)) (and (cons? (tl (tl V1717))) (and (= () (tl (tl (tl V1717)))) (= (hd (tl V1717)) bar!))))) (cons (hd V1717) (hd (tl (tl V1717))))) ((cons? V1717) (cons (shen.remove-bar (hd V1717)) (shen.remove-bar (tl V1717)))) (true V1717)))
+(defun shen.<side-conditions> (V1373) (let YaccParse (let Parse_shen.<side-condition> (shen.<side-condition> V1373) (if (not (= (fail) Parse_shen.<side-condition>)) (let Parse_shen.<side-conditions> (shen.<side-conditions> Parse_shen.<side-condition>) (if (not (= (fail) Parse_shen.<side-conditions>)) (shen.pair (hd Parse_shen.<side-conditions>) (cons (shen.hdtl Parse_shen.<side-condition>) (shen.hdtl Parse_shen.<side-conditions>))) (fail))) (fail))) (if (= YaccParse (fail)) (let Parse_<e> (<e> V1373) (if (not (= (fail) Parse_<e>)) (shen.pair (hd Parse_<e>) ()) (fail))) YaccParse)))
 
-(defun shen.<premises> (V1722) (let Result (let Parse_shen.<premise> (shen.<premise> V1722) (if (not (= (fail) Parse_shen.<premise>)) (let Parse_shen.<semicolon-symbol> (shen.<semicolon-symbol> Parse_shen.<premise>) (if (not (= (fail) Parse_shen.<semicolon-symbol>)) (let Parse_shen.<premises> (shen.<premises> Parse_shen.<semicolon-symbol>) (if (not (= (fail) Parse_shen.<premises>)) (shen.pair (hd Parse_shen.<premises>) (cons (shen.hdtl Parse_shen.<premise>) (shen.hdtl Parse_shen.<premises>))) (fail))) (fail))) (fail))) (if (= Result (fail)) (let Result (let Parse_<e> (<e> V1722) (if (not (= (fail) Parse_<e>)) (shen.pair (hd Parse_<e>) ()) (fail))) (if (= Result (fail)) (fail) Result)) Result)))
+(defun shen.<side-condition> (V1374) (let YaccParse (if (and (cons? (hd V1374)) (= if (hd (hd V1374)))) (let Parse_shen.<expr> (shen.<expr> (shen.pair (tl (hd V1374)) (shen.hdtl V1374))) (if (not (= (fail) Parse_shen.<expr>)) (shen.pair (hd Parse_shen.<expr>) (cons if (cons (shen.hdtl Parse_shen.<expr>) ()))) (fail))) (fail)) (if (= YaccParse (fail)) (if (and (cons? (hd V1374)) (= let (hd (hd V1374)))) (let Parse_shen.<variable?> (shen.<variable?> (shen.pair (tl (hd V1374)) (shen.hdtl V1374))) (if (not (= (fail) Parse_shen.<variable?>)) (let Parse_shen.<expr> (shen.<expr> Parse_shen.<variable?>) (if (not (= (fail) Parse_shen.<expr>)) (shen.pair (hd Parse_shen.<expr>) (cons let (cons (shen.hdtl Parse_shen.<variable?>) (cons (shen.hdtl Parse_shen.<expr>) ())))) (fail))) (fail))) (fail)) YaccParse)))
 
-(defun shen.<semicolon-symbol> (V1727) (let Result (if (cons? (hd V1727)) (let Parse_X (hd (hd V1727)) (if (= Parse_X ;) (shen.pair (hd (shen.pair (tl (hd V1727)) (shen.hdtl V1727))) shen.skip) (fail))) (fail)) (if (= Result (fail)) (fail) Result)))
+(defun shen.<variable?> (V1375) (if (cons? (hd V1375)) (let Parse_X (hd (hd V1375)) (if (variable? Parse_X) (shen.pair (hd (shen.pair (tl (hd V1375)) (shen.hdtl V1375))) Parse_X) (fail))) (fail)))
 
-(defun shen.<premise> (V1732) (let Result (if (and (cons? (hd V1732)) (= ! (hd (hd V1732)))) (shen.pair (hd (shen.pair (tl (hd V1732)) (shen.hdtl V1732))) !) (fail)) (if (= Result (fail)) (let Result (let Parse_shen.<formulae> (shen.<formulae> V1732) (if (not (= (fail) Parse_shen.<formulae>)) (if (and (cons? (hd Parse_shen.<formulae>)) (= >> (hd (hd Parse_shen.<formulae>)))) (let Parse_shen.<formula> (shen.<formula> (shen.pair (tl (hd Parse_shen.<formulae>)) (shen.hdtl Parse_shen.<formulae>))) (if (not (= (fail) Parse_shen.<formula>)) (shen.pair (hd Parse_shen.<formula>) (shen.sequent (shen.hdtl Parse_shen.<formulae>) (shen.hdtl Parse_shen.<formula>))) (fail))) (fail)) (fail))) (if (= Result (fail)) (let Result (let Parse_shen.<formula> (shen.<formula> V1732) (if (not (= (fail) Parse_shen.<formula>)) (shen.pair (hd Parse_shen.<formula>) (shen.sequent () (shen.hdtl Parse_shen.<formula>))) (fail))) (if (= Result (fail)) (fail) Result)) Result)) Result)))
+(defun shen.<expr> (V1376) (if (cons? (hd V1376)) (let Parse_X (hd (hd V1376)) (if (not (or (element? Parse_X (cons >> (cons ; ()))) (or (shen.singleunderline? Parse_X) (shen.doubleunderline? Parse_X)))) (shen.pair (hd (shen.pair (tl (hd V1376)) (shen.hdtl V1376))) (shen.remove-bar Parse_X)) (fail))) (fail)))
 
-(defun shen.<conclusion> (V1737) (let Result (let Parse_shen.<formulae> (shen.<formulae> V1737) (if (not (= (fail) Parse_shen.<formulae>)) (if (and (cons? (hd Parse_shen.<formulae>)) (= >> (hd (hd Parse_shen.<formulae>)))) (let Parse_shen.<formula> (shen.<formula> (shen.pair (tl (hd Parse_shen.<formulae>)) (shen.hdtl Parse_shen.<formulae>))) (if (not (= (fail) Parse_shen.<formula>)) (let Parse_shen.<semicolon-symbol> (shen.<semicolon-symbol> Parse_shen.<formula>) (if (not (= (fail) Parse_shen.<semicolon-symbol>)) (shen.pair (hd Parse_shen.<semicolon-symbol>) (shen.sequent (shen.hdtl Parse_shen.<formulae>) (shen.hdtl Parse_shen.<formula>))) (fail))) (fail))) (fail)) (fail))) (if (= Result (fail)) (let Result (let Parse_shen.<formula> (shen.<formula> V1737) (if (not (= (fail) Parse_shen.<formula>)) (let Parse_shen.<semicolon-symbol> (shen.<semicolon-symbol> Parse_shen.<formula>) (if (not (= (fail) Parse_shen.<semicolon-symbol>)) (shen.pair (hd Parse_shen.<semicolon-symbol>) (shen.sequent () (shen.hdtl Parse_shen.<formula>))) (fail))) (fail))) (if (= Result (fail)) (fail) Result)) Result)))
+(defun shen.remove-bar (V1377) (cond ((and (cons? V1377) (and (cons? (tl V1377)) (and (cons? (tl (tl V1377))) (and (= () (tl (tl (tl V1377)))) (= (hd (tl V1377)) bar!))))) (cons (hd V1377) (hd (tl (tl V1377))))) ((cons? V1377) (cons (shen.remove-bar (hd V1377)) (shen.remove-bar (tl V1377)))) (true V1377)))
 
-(defun shen.sequent (V1738 V1739) (@p V1738 V1739))
+(defun shen.<premises> (V1378) (let YaccParse (let Parse_shen.<premise> (shen.<premise> V1378) (if (not (= (fail) Parse_shen.<premise>)) (let Parse_shen.<semicolon-symbol> (shen.<semicolon-symbol> Parse_shen.<premise>) (if (not (= (fail) Parse_shen.<semicolon-symbol>)) (let Parse_shen.<premises> (shen.<premises> Parse_shen.<semicolon-symbol>) (if (not (= (fail) Parse_shen.<premises>)) (shen.pair (hd Parse_shen.<premises>) (cons (shen.hdtl Parse_shen.<premise>) (shen.hdtl Parse_shen.<premises>))) (fail))) (fail))) (fail))) (if (= YaccParse (fail)) (let Parse_<e> (<e> V1378) (if (not (= (fail) Parse_<e>)) (shen.pair (hd Parse_<e>) ()) (fail))) YaccParse)))
 
-(defun shen.<formulae> (V1744) (let Result (let Parse_shen.<formula> (shen.<formula> V1744) (if (not (= (fail) Parse_shen.<formula>)) (let Parse_shen.<comma-symbol> (shen.<comma-symbol> Parse_shen.<formula>) (if (not (= (fail) Parse_shen.<comma-symbol>)) (let Parse_shen.<formulae> (shen.<formulae> Parse_shen.<comma-symbol>) (if (not (= (fail) Parse_shen.<formulae>)) (shen.pair (hd Parse_shen.<formulae>) (cons (shen.hdtl Parse_shen.<formula>) (shen.hdtl Parse_shen.<formulae>))) (fail))) (fail))) (fail))) (if (= Result (fail)) (let Result (let Parse_shen.<formula> (shen.<formula> V1744) (if (not (= (fail) Parse_shen.<formula>)) (shen.pair (hd Parse_shen.<formula>) (cons (shen.hdtl Parse_shen.<formula>) ())) (fail))) (if (= Result (fail)) (let Result (let Parse_<e> (<e> V1744) (if (not (= (fail) Parse_<e>)) (shen.pair (hd Parse_<e>) ()) (fail))) (if (= Result (fail)) (fail) Result)) Result)) Result)))
+(defun shen.<semicolon-symbol> (V1379) (if (cons? (hd V1379)) (let Parse_X (hd (hd V1379)) (if (= Parse_X ;) (shen.pair (hd (shen.pair (tl (hd V1379)) (shen.hdtl V1379))) shen.skip) (fail))) (fail)))
 
-(defun shen.<comma-symbol> (V1749) (let Result (if (cons? (hd V1749)) (let Parse_X (hd (hd V1749)) (if (= Parse_X (intern ",")) (shen.pair (hd (shen.pair (tl (hd V1749)) (shen.hdtl V1749))) shen.skip) (fail))) (fail)) (if (= Result (fail)) (fail) Result)))
+(defun shen.<premise> (V1380) (let YaccParse (if (and (cons? (hd V1380)) (= ! (hd (hd V1380)))) (shen.pair (hd (shen.pair (tl (hd V1380)) (shen.hdtl V1380))) !) (fail)) (if (= YaccParse (fail)) (let YaccParse (let Parse_shen.<formulae> (shen.<formulae> V1380) (if (not (= (fail) Parse_shen.<formulae>)) (if (and (cons? (hd Parse_shen.<formulae>)) (= >> (hd (hd Parse_shen.<formulae>)))) (let Parse_shen.<formula> (shen.<formula> (shen.pair (tl (hd Parse_shen.<formulae>)) (shen.hdtl Parse_shen.<formulae>))) (if (not (= (fail) Parse_shen.<formula>)) (shen.pair (hd Parse_shen.<formula>) (shen.sequent (shen.hdtl Parse_shen.<formulae>) (shen.hdtl Parse_shen.<formula>))) (fail))) (fail)) (fail))) (if (= YaccParse (fail)) (let Parse_shen.<formula> (shen.<formula> V1380) (if (not (= (fail) Parse_shen.<formula>)) (shen.pair (hd Parse_shen.<formula>) (shen.sequent () (shen.hdtl Parse_shen.<formula>))) (fail))) YaccParse)) YaccParse)))
 
-(defun shen.<formula> (V1754) (let Result (let Parse_shen.<expr> (shen.<expr> V1754) (if (not (= (fail) Parse_shen.<expr>)) (if (and (cons? (hd Parse_shen.<expr>)) (= : (hd (hd Parse_shen.<expr>)))) (let Parse_shen.<type> (shen.<type> (shen.pair (tl (hd Parse_shen.<expr>)) (shen.hdtl Parse_shen.<expr>))) (if (not (= (fail) Parse_shen.<type>)) (shen.pair (hd Parse_shen.<type>) (cons (shen.curry (shen.hdtl Parse_shen.<expr>)) (cons : (cons (shen.demodulate (shen.hdtl Parse_shen.<type>)) ())))) (fail))) (fail)) (fail))) (if (= Result (fail)) (let Result (let Parse_shen.<expr> (shen.<expr> V1754) (if (not (= (fail) Parse_shen.<expr>)) (shen.pair (hd Parse_shen.<expr>) (shen.hdtl Parse_shen.<expr>)) (fail))) (if (= Result (fail)) (fail) Result)) Result)))
+(defun shen.<conclusion> (V1381) (let YaccParse (let Parse_shen.<formulae> (shen.<formulae> V1381) (if (not (= (fail) Parse_shen.<formulae>)) (if (and (cons? (hd Parse_shen.<formulae>)) (= >> (hd (hd Parse_shen.<formulae>)))) (let Parse_shen.<formula> (shen.<formula> (shen.pair (tl (hd Parse_shen.<formulae>)) (shen.hdtl Parse_shen.<formulae>))) (if (not (= (fail) Parse_shen.<formula>)) (let Parse_shen.<semicolon-symbol> (shen.<semicolon-symbol> Parse_shen.<formula>) (if (not (= (fail) Parse_shen.<semicolon-symbol>)) (shen.pair (hd Parse_shen.<semicolon-symbol>) (shen.sequent (shen.hdtl Parse_shen.<formulae>) (shen.hdtl Parse_shen.<formula>))) (fail))) (fail))) (fail)) (fail))) (if (= YaccParse (fail)) (let Parse_shen.<formula> (shen.<formula> V1381) (if (not (= (fail) Parse_shen.<formula>)) (let Parse_shen.<semicolon-symbol> (shen.<semicolon-symbol> Parse_shen.<formula>) (if (not (= (fail) Parse_shen.<semicolon-symbol>)) (shen.pair (hd Parse_shen.<semicolon-symbol>) (shen.sequent () (shen.hdtl Parse_shen.<formula>))) (fail))) (fail))) YaccParse)))
 
-(defun shen.<type> (V1759) (let Result (let Parse_shen.<expr> (shen.<expr> V1759) (if (not (= (fail) Parse_shen.<expr>)) (shen.pair (hd Parse_shen.<expr>) (shen.curry-type (shen.hdtl Parse_shen.<expr>))) (fail))) (if (= Result (fail)) (fail) Result)))
+(defun shen.sequent (V1382 V1383) (@p V1382 V1383))
 
-(defun shen.<doubleunderline> (V1764) (let Result (if (cons? (hd V1764)) (let Parse_X (hd (hd V1764)) (if (shen.doubleunderline? Parse_X) (shen.pair (hd (shen.pair (tl (hd V1764)) (shen.hdtl V1764))) Parse_X) (fail))) (fail)) (if (= Result (fail)) (fail) Result)))
+(defun shen.<formulae> (V1384) (let YaccParse (let Parse_shen.<formula> (shen.<formula> V1384) (if (not (= (fail) Parse_shen.<formula>)) (let Parse_shen.<comma-symbol> (shen.<comma-symbol> Parse_shen.<formula>) (if (not (= (fail) Parse_shen.<comma-symbol>)) (let Parse_shen.<formulae> (shen.<formulae> Parse_shen.<comma-symbol>) (if (not (= (fail) Parse_shen.<formulae>)) (shen.pair (hd Parse_shen.<formulae>) (cons (shen.hdtl Parse_shen.<formula>) (shen.hdtl Parse_shen.<formulae>))) (fail))) (fail))) (fail))) (if (= YaccParse (fail)) (let YaccParse (let Parse_shen.<formula> (shen.<formula> V1384) (if (not (= (fail) Parse_shen.<formula>)) (shen.pair (hd Parse_shen.<formula>) (cons (shen.hdtl Parse_shen.<formula>) ())) (fail))) (if (= YaccParse (fail)) (let Parse_<e> (<e> V1384) (if (not (= (fail) Parse_<e>)) (shen.pair (hd Parse_<e>) ()) (fail))) YaccParse)) YaccParse)))
 
-(defun shen.<singleunderline> (V1769) (let Result (if (cons? (hd V1769)) (let Parse_X (hd (hd V1769)) (if (shen.singleunderline? Parse_X) (shen.pair (hd (shen.pair (tl (hd V1769)) (shen.hdtl V1769))) Parse_X) (fail))) (fail)) (if (= Result (fail)) (fail) Result)))
+(defun shen.<comma-symbol> (V1385) (if (cons? (hd V1385)) (let Parse_X (hd (hd V1385)) (if (= Parse_X (intern ",")) (shen.pair (hd (shen.pair (tl (hd V1385)) (shen.hdtl V1385))) shen.skip) (fail))) (fail)))
 
-(defun shen.singleunderline? (V1770) (and (symbol? V1770) (shen.sh? (str V1770))))
+(defun shen.<formula> (V1386) (let YaccParse (let Parse_shen.<expr> (shen.<expr> V1386) (if (not (= (fail) Parse_shen.<expr>)) (if (and (cons? (hd Parse_shen.<expr>)) (= : (hd (hd Parse_shen.<expr>)))) (let Parse_shen.<type> (shen.<type> (shen.pair (tl (hd Parse_shen.<expr>)) (shen.hdtl Parse_shen.<expr>))) (if (not (= (fail) Parse_shen.<type>)) (shen.pair (hd Parse_shen.<type>) (cons (shen.curry (shen.hdtl Parse_shen.<expr>)) (cons : (cons (shen.demodulate (shen.hdtl Parse_shen.<type>)) ())))) (fail))) (fail)) (fail))) (if (= YaccParse (fail)) (let Parse_shen.<expr> (shen.<expr> V1386) (if (not (= (fail) Parse_shen.<expr>)) (shen.pair (hd Parse_shen.<expr>) (shen.hdtl Parse_shen.<expr>)) (fail))) YaccParse)))
 
-(defun shen.sh? (V1771) (cond ((= "_" V1771) true) (true (and (= (pos V1771 0) "_") (shen.sh? (tlstr V1771))))))
+(defun shen.<type> (V1387) (let Parse_shen.<expr> (shen.<expr> V1387) (if (not (= (fail) Parse_shen.<expr>)) (shen.pair (hd Parse_shen.<expr>) (shen.curry-type (shen.hdtl Parse_shen.<expr>))) (fail))))
 
-(defun shen.doubleunderline? (V1772) (and (symbol? V1772) (shen.dh? (str V1772))))
+(defun shen.<doubleunderline> (V1388) (if (cons? (hd V1388)) (let Parse_X (hd (hd V1388)) (if (shen.doubleunderline? Parse_X) (shen.pair (hd (shen.pair (tl (hd V1388)) (shen.hdtl V1388))) Parse_X) (fail))) (fail)))
 
-(defun shen.dh? (V1773) (cond ((= "=" V1773) true) (true (and (= (pos V1773 0) "=") (shen.dh? (tlstr V1773))))))
+(defun shen.<singleunderline> (V1389) (if (cons? (hd V1389)) (let Parse_X (hd (hd V1389)) (if (shen.singleunderline? Parse_X) (shen.pair (hd (shen.pair (tl (hd V1389)) (shen.hdtl V1389))) Parse_X) (fail))) (fail)))
 
-(defun shen.process-datatype (V1774 V1775) (shen.remember-datatype (shen.s-prolog (shen.rules->horn-clauses V1774 V1775))))
+(defun shen.singleunderline? (V1390) (and (symbol? V1390) (shen.sh? (str V1390))))
 
-(defun shen.remember-datatype (V1780) (cond ((cons? V1780) (do (set shen.*datatypes* (adjoin (hd V1780) (value shen.*datatypes*))) (do (set shen.*alldatatypes* (adjoin (hd V1780) (value shen.*alldatatypes*))) (hd V1780)))) (true (shen.sys-error shen.remember-datatype))))
+(defun shen.sh? (V1391) (cond ((= "_" V1391) true) (true (and (= (pos V1391 0) "_") (shen.sh? (tlstr V1391))))))
 
-(defun shen.rules->horn-clauses (V1783 V1784) (cond ((= () V1784) ()) ((and (cons? V1784) (and (tuple? (hd V1784)) (= shen.single (fst (hd V1784))))) (cons (shen.rule->horn-clause V1783 (snd (hd V1784))) (shen.rules->horn-clauses V1783 (tl V1784)))) ((and (cons? V1784) (and (tuple? (hd V1784)) (= shen.double (fst (hd V1784))))) (shen.rules->horn-clauses V1783 (append (shen.double->singles (snd (hd V1784))) (tl V1784)))) (true (shen.sys-error shen.rules->horn-clauses))))
+(defun shen.doubleunderline? (V1392) (and (symbol? V1392) (shen.dh? (str V1392))))
 
-(defun shen.double->singles (V1785) (cons (shen.right-rule V1785) (cons (shen.left-rule V1785) ())))
+(defun shen.dh? (V1393) (cond ((= "=" V1393) true) (true (and (= (pos V1393 0) "=") (shen.dh? (tlstr V1393))))))
 
-(defun shen.right-rule (V1786) (@p shen.single V1786))
+(defun shen.process-datatype (V1394 V1395) (shen.remember-datatype (shen.s-prolog (shen.rules->horn-clauses V1394 V1395))))
 
-(defun shen.left-rule (V1787) (cond ((and (cons? V1787) (and (cons? (tl V1787)) (and (cons? (tl (tl V1787))) (and (tuple? (hd (tl (tl V1787)))) (and (= () (fst (hd (tl (tl V1787))))) (= () (tl (tl (tl V1787))))))))) (let Q (gensym Qv) (let NewConclusion (@p (cons (snd (hd (tl (tl V1787)))) ()) Q) (let NewPremises (cons (@p (map (lambda X1675 (shen.right->left X1675)) (hd (tl V1787))) Q) ()) (@p shen.single (cons (hd V1787) (cons NewPremises (cons NewConclusion ())))))))) (true (shen.sys-error shen.left-rule))))
+(defun shen.remember-datatype (V1400) (cond ((cons? V1400) (do (set shen.*datatypes* (adjoin (hd V1400) (value shen.*datatypes*))) (do (set shen.*alldatatypes* (adjoin (hd V1400) (value shen.*alldatatypes*))) (hd V1400)))) (true (shen.f_error shen.remember-datatype))))
 
-(defun shen.right->left (V1792) (cond ((and (tuple? V1792) (= () (fst V1792))) (snd V1792)) (true (simple-error "syntax error with ==========
+(defun shen.rules->horn-clauses (V1403 V1404) (cond ((= () V1404) ()) ((and (cons? V1404) (and (tuple? (hd V1404)) (= shen.single (fst (hd V1404))))) (cons (shen.rule->horn-clause V1403 (snd (hd V1404))) (shen.rules->horn-clauses V1403 (tl V1404)))) ((and (cons? V1404) (and (tuple? (hd V1404)) (= shen.double (fst (hd V1404))))) (shen.rules->horn-clauses V1403 (append (shen.double->singles (snd (hd V1404))) (tl V1404)))) (true (shen.f_error shen.rules->horn-clauses))))
+
+(defun shen.double->singles (V1405) (cons (shen.right-rule V1405) (cons (shen.left-rule V1405) ())))
+
+(defun shen.right-rule (V1406) (@p shen.single V1406))
+
+(defun shen.left-rule (V1407) (cond ((and (cons? V1407) (and (cons? (tl V1407)) (and (cons? (tl (tl V1407))) (and (tuple? (hd (tl (tl V1407)))) (and (= () (fst (hd (tl (tl V1407))))) (= () (tl (tl (tl V1407))))))))) (let Q (gensym Qv) (let NewConclusion (@p (cons (snd (hd (tl (tl V1407)))) ()) Q) (let NewPremises (cons (@p (map (lambda V1359 (shen.right->left V1359)) (hd (tl V1407))) Q) ()) (@p shen.single (cons (hd V1407) (cons NewPremises (cons NewConclusion ())))))))) (true (shen.f_error shen.left-rule))))
+
+(defun shen.right->left (V1412) (cond ((and (tuple? V1412) (= () (fst V1412))) (snd V1412)) (true (simple-error "syntax error with ==========
 "))))
 
-(defun shen.rule->horn-clause (V1793 V1794) (cond ((and (cons? V1794) (and (cons? (tl V1794)) (and (cons? (tl (tl V1794))) (and (tuple? (hd (tl (tl V1794)))) (= () (tl (tl (tl V1794)))))))) (cons (shen.rule->horn-clause-head V1793 (snd (hd (tl (tl V1794))))) (cons :- (cons (shen.rule->horn-clause-body (hd V1794) (hd (tl V1794)) (fst (hd (tl (tl V1794))))) ())))) (true (shen.sys-error shen.rule->horn-clause))))
+(defun shen.rule->horn-clause (V1413 V1414) (cond ((and (cons? V1414) (and (cons? (tl V1414)) (and (cons? (tl (tl V1414))) (and (tuple? (hd (tl (tl V1414)))) (= () (tl (tl (tl V1414)))))))) (cons (shen.rule->horn-clause-head V1413 (snd (hd (tl (tl V1414))))) (cons :- (cons (shen.rule->horn-clause-body (hd V1414) (hd (tl V1414)) (fst (hd (tl (tl V1414))))) ())))) (true (shen.f_error shen.rule->horn-clause))))
 
-(defun shen.rule->horn-clause-head (V1795 V1796) (cons V1795 (cons (shen.mode-ify V1796) (cons Context_1957 ()))))
+(defun shen.rule->horn-clause-head (V1415 V1416) (cons V1415 (cons (shen.mode-ify V1416) (cons Context_1957 ()))))
 
-(defun shen.mode-ify (V1797) (cond ((and (cons? V1797) (and (cons? (tl V1797)) (and (= : (hd (tl V1797))) (and (cons? (tl (tl V1797))) (= () (tl (tl (tl V1797)))))))) (cons mode (cons (cons (hd V1797) (cons : (cons (cons mode (cons (hd (tl (tl V1797))) (cons + ()))) ()))) (cons - ())))) (true V1797)))
+(defun shen.mode-ify (V1417) (cond ((and (cons? V1417) (and (cons? (tl V1417)) (and (= : (hd (tl V1417))) (and (cons? (tl (tl V1417))) (= () (tl (tl (tl V1417)))))))) (cons mode (cons (cons (hd V1417) (cons : (cons (cons mode (cons (hd (tl (tl V1417))) (cons + ()))) ()))) (cons - ())))) (true V1417)))
 
-(defun shen.rule->horn-clause-body (V1798 V1799 V1800) (let Variables (map (lambda X1676 (shen.extract_vars X1676)) V1800) (let Predicates (map (lambda X (gensym shen.cl)) V1800) (let SearchLiterals (shen.construct-search-literals Predicates Variables Context_1957 Context1_1957) (let SearchClauses (shen.construct-search-clauses Predicates V1800 Variables) (let SideLiterals (shen.construct-side-literals V1798) (let PremissLiterals (map (lambda X (shen.construct-premiss-literal X (empty? V1800))) V1799) (append SearchLiterals (append SideLiterals PremissLiterals)))))))))
+(defun shen.rule->horn-clause-body (V1418 V1419 V1420) (let Variables (map (lambda V1360 (shen.extract_vars V1360)) V1420) (let Predicates (map (lambda X (gensym shen.cl)) V1420) (let SearchLiterals (shen.construct-search-literals Predicates Variables Context_1957 Context1_1957) (let SearchClauses (shen.construct-search-clauses Predicates V1420 Variables) (let SideLiterals (shen.construct-side-literals V1418) (let PremissLiterals (map (lambda X (shen.construct-premiss-literal X (empty? V1420))) V1419) (append SearchLiterals (append SideLiterals PremissLiterals)))))))))
 
-(defun shen.construct-search-literals (V1805 V1806 V1807 V1808) (cond ((and (= () V1805) (= () V1806)) ()) (true (shen.csl-help V1805 V1806 V1807 V1808))))
+(defun shen.construct-search-literals (V1425 V1426 V1427 V1428) (cond ((and (= () V1425) (= () V1426)) ()) (true (shen.csl-help V1425 V1426 V1427 V1428))))
 
-(defun shen.csl-help (V1811 V1812 V1813 V1814) (cond ((and (= () V1811) (= () V1812)) (cons (cons bind (cons ContextOut_1957 (cons V1813 ()))) ())) ((and (cons? V1811) (cons? V1812)) (cons (cons (hd V1811) (cons V1813 (cons V1814 (hd V1812)))) (shen.csl-help (tl V1811) (tl V1812) V1814 (gensym Context)))) (true (shen.sys-error shen.csl-help))))
+(defun shen.csl-help (V1431 V1432 V1433 V1434) (cond ((and (= () V1431) (= () V1432)) (cons (cons bind (cons ContextOut_1957 (cons V1433 ()))) ())) ((and (cons? V1431) (cons? V1432)) (cons (cons (hd V1431) (cons V1433 (cons V1434 (hd V1432)))) (shen.csl-help (tl V1431) (tl V1432) V1434 (gensym Context)))) (true (shen.f_error shen.csl-help))))
 
-(defun shen.construct-search-clauses (V1815 V1816 V1817) (cond ((and (= () V1815) (and (= () V1816) (= () V1817))) shen.skip) ((and (cons? V1815) (and (cons? V1816) (cons? V1817))) (do (shen.construct-search-clause (hd V1815) (hd V1816) (hd V1817)) (shen.construct-search-clauses (tl V1815) (tl V1816) (tl V1817)))) (true (shen.sys-error shen.construct-search-clauses))))
+(defun shen.construct-search-clauses (V1435 V1436 V1437) (cond ((and (= () V1435) (and (= () V1436) (= () V1437))) shen.skip) ((and (cons? V1435) (and (cons? V1436) (cons? V1437))) (do (shen.construct-search-clause (hd V1435) (hd V1436) (hd V1437)) (shen.construct-search-clauses (tl V1435) (tl V1436) (tl V1437)))) (true (shen.f_error shen.construct-search-clauses))))
 
-(defun shen.construct-search-clause (V1818 V1819 V1820) (shen.s-prolog (cons (shen.construct-base-search-clause V1818 V1819 V1820) (cons (shen.construct-recursive-search-clause V1818 V1819 V1820) ()))))
+(defun shen.construct-search-clause (V1438 V1439 V1440) (shen.s-prolog (cons (shen.construct-base-search-clause V1438 V1439 V1440) (cons (shen.construct-recursive-search-clause V1438 V1439 V1440) ()))))
 
-(defun shen.construct-base-search-clause (V1821 V1822 V1823) (cons (cons V1821 (cons (cons (shen.mode-ify V1822) In_1957) (cons In_1957 V1823))) (cons :- (cons () ()))))
+(defun shen.construct-base-search-clause (V1441 V1442 V1443) (cons (cons V1441 (cons (cons (shen.mode-ify V1442) In_1957) (cons In_1957 V1443))) (cons :- (cons () ()))))
 
-(defun shen.construct-recursive-search-clause (V1824 V1825 V1826) (cons (cons V1824 (cons (cons Assumption_1957 Assumptions_1957) (cons (cons Assumption_1957 Out_1957) V1826))) (cons :- (cons (cons (cons V1824 (cons Assumptions_1957 (cons Out_1957 V1826))) ()) ()))))
+(defun shen.construct-recursive-search-clause (V1444 V1445 V1446) (cons (cons V1444 (cons (cons Assumption_1957 Assumptions_1957) (cons (cons Assumption_1957 Out_1957) V1446))) (cons :- (cons (cons (cons V1444 (cons Assumptions_1957 (cons Out_1957 V1446))) ()) ()))))
 
-(defun shen.construct-side-literals (V1831) (cond ((= () V1831) ()) ((and (cons? V1831) (and (cons? (hd V1831)) (and (= if (hd (hd V1831))) (and (cons? (tl (hd V1831))) (= () (tl (tl (hd V1831)))))))) (cons (cons when (tl (hd V1831))) (shen.construct-side-literals (tl V1831)))) ((and (cons? V1831) (and (cons? (hd V1831)) (and (= let (hd (hd V1831))) (and (cons? (tl (hd V1831))) (and (cons? (tl (tl (hd V1831)))) (= () (tl (tl (tl (hd V1831)))))))))) (cons (cons is (tl (hd V1831))) (shen.construct-side-literals (tl V1831)))) ((cons? V1831) (shen.construct-side-literals (tl V1831))) (true (shen.sys-error shen.construct-side-literals))))
+(defun shen.construct-side-literals (V1451) (cond ((= () V1451) ()) ((and (cons? V1451) (and (cons? (hd V1451)) (and (= if (hd (hd V1451))) (and (cons? (tl (hd V1451))) (= () (tl (tl (hd V1451)))))))) (cons (cons when (tl (hd V1451))) (shen.construct-side-literals (tl V1451)))) ((and (cons? V1451) (and (cons? (hd V1451)) (and (= let (hd (hd V1451))) (and (cons? (tl (hd V1451))) (and (cons? (tl (tl (hd V1451)))) (= () (tl (tl (tl (hd V1451)))))))))) (cons (cons is (tl (hd V1451))) (shen.construct-side-literals (tl V1451)))) ((cons? V1451) (shen.construct-side-literals (tl V1451))) (true (shen.f_error shen.construct-side-literals))))
 
-(defun shen.construct-premiss-literal (V1836 V1837) (cond ((tuple? V1836) (cons shen.t* (cons (shen.recursive_cons_form (snd V1836)) (cons (shen.construct-context V1837 (fst V1836)) ())))) ((= ! V1836) (cons cut (cons Throwcontrol ()))) (true (shen.sys-error shen.construct-premiss-literal))))
+(defun shen.construct-premiss-literal (V1456 V1457) (cond ((tuple? V1456) (cons shen.t* (cons (shen.recursive_cons_form (snd V1456)) (cons (shen.construct-context V1457 (fst V1456)) ())))) ((= ! V1456) (cons cut (cons Throwcontrol ()))) (true (shen.f_error shen.construct-premiss-literal))))
 
-(defun shen.construct-context (V1838 V1839) (cond ((and (= true V1838) (= () V1839)) Context_1957) ((and (= false V1838) (= () V1839)) ContextOut_1957) ((cons? V1839) (cons cons (cons (shen.recursive_cons_form (hd V1839)) (cons (shen.construct-context V1838 (tl V1839)) ())))) (true (shen.sys-error shen.construct-context))))
+(defun shen.construct-context (V1458 V1459) (cond ((and (= true V1458) (= () V1459)) Context_1957) ((and (= false V1458) (= () V1459)) ContextOut_1957) ((cons? V1459) (cons cons (cons (shen.recursive_cons_form (hd V1459)) (cons (shen.construct-context V1458 (tl V1459)) ())))) (true (shen.f_error shen.construct-context))))
 
-(defun shen.recursive_cons_form (V1840) (cond ((cons? V1840) (cons cons (cons (shen.recursive_cons_form (hd V1840)) (cons (shen.recursive_cons_form (tl V1840)) ())))) (true V1840)))
+(defun shen.recursive_cons_form (V1460) (cond ((cons? V1460) (cons cons (cons (shen.recursive_cons_form (hd V1460)) (cons (shen.recursive_cons_form (tl V1460)) ())))) (true V1460)))
 
-(defun preclude (V1841) (shen.preclude-h (map (lambda X1677 (shen.intern-type X1677)) V1841)))
+(defun preclude (V1461) (shen.preclude-h (map (lambda V1361 (shen.intern-type V1361)) V1461)))
 
-(defun shen.preclude-h (V1842) (let FilterDatatypes (set shen.*datatypes* (difference (value shen.*datatypes*) V1842)) (value shen.*datatypes*)))
+(defun shen.preclude-h (V1462) (let FilterDatatypes (set shen.*datatypes* (difference (value shen.*datatypes*) V1462)) (value shen.*datatypes*)))
 
-(defun include (V1843) (shen.include-h (map (lambda X1678 (shen.intern-type X1678)) V1843)))
+(defun include (V1463) (shen.include-h (map (lambda V1362 (shen.intern-type V1362)) V1463)))
 
-(defun shen.include-h (V1844) (let ValidTypes (intersection V1844 (value shen.*alldatatypes*)) (let NewDatatypes (set shen.*datatypes* (union ValidTypes (value shen.*datatypes*))) (value shen.*datatypes*))))
+(defun shen.include-h (V1464) (let ValidTypes (intersection V1464 (value shen.*alldatatypes*)) (let NewDatatypes (set shen.*datatypes* (union ValidTypes (value shen.*datatypes*))) (value shen.*datatypes*))))
 
-(defun preclude-all-but (V1845) (shen.preclude-h (difference (value shen.*alldatatypes*) (map (lambda X1679 (shen.intern-type X1679)) V1845))))
+(defun preclude-all-but (V1465) (shen.preclude-h (difference (value shen.*alldatatypes*) (map (lambda V1363 (shen.intern-type V1363)) V1465))))
 
-(defun include-all-but (V1846) (shen.include-h (difference (value shen.*alldatatypes*) (map (lambda X1680 (shen.intern-type X1680)) V1846))))
+(defun include-all-but (V1466) (shen.include-h (difference (value shen.*alldatatypes*) (map (lambda V1364 (shen.intern-type V1364)) V1466))))
 
-(defun shen.synonyms-help (V1851) (cond ((= () V1851) (shen.demodulation-function (value shen.*tc*) (mapcan (lambda X1681 (shen.demod-rule X1681)) (value shen.*synonyms*)))) ((and (cons? V1851) (cons? (tl V1851))) (let Vs (difference (shen.extract_vars (hd (tl V1851))) (shen.extract_vars (hd V1851))) (if (empty? Vs) (do (shen.pushnew (cons (hd V1851) (cons (hd (tl V1851)) ())) shen.*synonyms*) (shen.synonyms-help (tl (tl V1851)))) (shen.free_variable_warnings (hd (tl V1851)) Vs)))) (true (simple-error "odd number of synonyms
+(defun shen.synonyms-help (V1471) (cond ((= () V1471) (shen.demodulation-function (value shen.*tc*) (mapcan (lambda V1365 (shen.demod-rule V1365)) (value shen.*synonyms*)))) ((and (cons? V1471) (cons? (tl V1471))) (let Vs (difference (shen.extract_vars (hd (tl V1471))) (shen.extract_vars (hd V1471))) (if (empty? Vs) (do (shen.pushnew (cons (hd V1471) (cons (hd (tl V1471)) ())) shen.*synonyms*) (shen.synonyms-help (tl (tl V1471)))) (shen.free_variable_warnings (hd (tl V1471)) Vs)))) (true (simple-error "odd number of synonyms
 "))))
 
-(defun shen.pushnew (V1852 V1853) (if (element? V1852 (value V1853)) (value V1853) (set V1853 (cons V1852 (value V1853)))))
+(defun shen.pushnew (V1472 V1473) (if (element? V1472 (value V1473)) (value V1473) (set V1473 (cons V1472 (value V1473)))))
 
-(defun shen.demod-rule (V1854) (cond ((and (cons? V1854) (and (cons? (tl V1854)) (= () (tl (tl V1854))))) (cons (shen.rcons_form (hd V1854)) (cons -> (cons (shen.rcons_form (hd (tl V1854))) ())))) (true (shen.sys-error shen.demod-rule))))
+(defun shen.demod-rule (V1474) (cond ((and (cons? V1474) (and (cons? (tl V1474)) (= () (tl (tl V1474))))) (cons (shen.rcons_form (hd V1474)) (cons -> (cons (shen.rcons_form (hd (tl V1474))) ())))) (true (shen.f_error shen.demod-rule))))
 
-(defun shen.demodulation-function (V1855 V1856) (do (tc -) (do (eval (cons define (cons shen.demod (append V1856 (shen.default-rule))))) (do (if V1855 (tc +) shen.skip) synonyms))))
+(defun shen.demodulation-function (V1475 V1476) (do (tc -) (do (eval (cons define (cons shen.demod (append V1476 (shen.default-rule))))) (do (if V1475 (tc +) shen.skip) synonyms))))
 
 (defun shen.default-rule () (cons X (cons -> (cons X ()))))
 

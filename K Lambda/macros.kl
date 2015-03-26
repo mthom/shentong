@@ -1,111 +1,91 @@
-"**********************************************************************************
-*                           The License						                                      *
-* 										                                                                  *
-* The user is free to produce commercial applications with the software, to 	          *
-* distribute these applications in source or binary  form, and to charge monies         *
-* for them as he sees fit and in concordance with the laws of the land subject 	        *
-* to the following license.							                                                *
-*										                                                                    * 
-* 1. The license applies to all the software and all derived software and 	            *
-*    must appear on such.							                                                  *
-*										                                                                    *
-* 2. It is illegal to distribute the software without this license attached	            *
-*    to it and use of the software implies agreement with the license as such.          *
-*    It is illegal for anyone who is not the copyright holder to tamper with 	          *
-*    or change the license.							                                                *
-*										                                                                    *
-* 3. Neither the names of Lambda Associates or the copyright holder may be used         *
-*    to endorse or promote products built using the software without specific 	        *
-*    prior written permission from the copyright holder.		                            *
-*										                                                                    *
-* 4. That possession of this license does not confer on the copyright holder 	          *
-*    any special contractual obligation towards the user. That in no event 	            * 
-*    shall the copyright holder be liable for any direct, indirect, incidental,        *   
-*    special, exemplary or consequential damages (including but not limited             *
-*    to procurement of substitute goods or services, loss of use, data, 	              * 
-*    interruption), however caused and on any theory of liability, whether in	          * 
-*    contract, strict liability or tort (including negligence) arising in any         	*
-*    way out of the use of the software, even if advised of the possibility of         	*
-*    such damage.						                                                        		* 
-*										                                                                    *
-* 5. It is permitted for the user to change the software, for the purpose of 	          *
-*    improving performance, correcting an error, or porting to a new platform, 	        *
-*    and distribute the derived version of Shen provided the resulting program 	        *
-*    conforms in all respects to the Shen standard and is issued under that             * 
-*    title. The user must make it clear with his distribution that he/she is 	          *
-*    the author of the changes and what these changes are and why. 		                  *
-*										                                                                    *
-* 6. Derived versions of this software in whatever form are subject to the same         *
-*    restrictions. In particular it is not permitted to make derived copies of          *
-*    this software which do not conform to the Shen standard or appear under a          *
-*    different title.								                                                    *
-*										                                                                    *
-*    It is permitted to distribute versions of Shen which incorporate libraries,        *
-*    graphics or other facilities which are not part of the Shen standard.	            *
-*										                                                                    *
-* For an explication of this license see www.shenlanguage.org/license.htm which         *
-* explains this license in full.                                                        *
-*				 						                                                                    *
-*****************************************************************************************
-"(defun macroexpand (V882) (let Y (shen.compose (value *macros*) V882) (if (= V882 Y) V882 (shen.walk (lambda X879 (macroexpand X879)) Y))))
+"Copyright (c) 2015, Mark Tarver
 
-(set *macros* (cons shen.timer-macro (cons shen.cases-macro (cons shen.abs-macro (cons shen.put/get-macro (cons shen.compile-macro (cons shen.datatype-macro (cons shen.let-macro (cons shen.assoc-macro (cons shen.make-string-macro (cons shen.output-macro (cons shen.input-macro (cons shen.error-macro (cons shen.prolog-macro (cons shen.synonyms-macro (cons shen.nl-macro (cons shen.@s-macro (cons shen.defprolog-macro (cons shen.function-macro ())))))))))))))))))))
+All rights reserved.
 
-(defun shen.error-macro (V883) (cond ((and (cons? V883) (and (= error (hd V883)) (cons? (tl V883)))) (cons simple-error (cons (shen.mkstr (hd (tl V883)) (tl (tl V883))) ()))) (true V883)))
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of Mark Tarver may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
 
-(defun shen.output-macro (V884) (cond ((and (cons? V884) (and (= output (hd V884)) (cons? (tl V884)))) (cons shen.prhush (cons (shen.mkstr (hd (tl V884)) (tl (tl V884))) (cons (cons stoutput ()) ())))) ((and (cons? V884) (and (= pr (hd V884)) (and (cons? (tl V884)) (= () (tl (tl V884)))))) (cons pr (cons (hd (tl V884)) (cons (cons stoutput ()) ())))) (true V884)))
+THIS SOFTWARE IS PROVIDED BY Mark Tarver ''AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL Mark Tarver BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 
-(defun shen.make-string-macro (V885) (cond ((and (cons? V885) (and (= make-string (hd V885)) (cons? (tl V885)))) (shen.mkstr (hd (tl V885)) (tl (tl V885)))) (true V885)))
+(defun macroexpand (V773) (let Y (shen.compose (value *macros*) V773) (if (= V773 Y) V773 (shen.walk (lambda V770 (macroexpand V770)) Y))))
 
-(defun shen.input-macro (V886) (cond ((and (cons? V886) (and (= lineread (hd V886)) (= () (tl V886)))) (cons lineread (cons (cons stinput ()) ()))) ((and (cons? V886) (and (= input (hd V886)) (= () (tl V886)))) (cons input (cons (cons stinput ()) ()))) ((and (cons? V886) (and (= read (hd V886)) (= () (tl V886)))) (cons read (cons (cons stinput ()) ()))) ((and (cons? V886) (and (= input+ (hd V886)) (and (cons? (tl V886)) (= () (tl (tl V886)))))) (cons input+ (cons (hd (tl V886)) (cons (cons stinput ()) ())))) ((and (cons? V886) (and (= read-byte (hd V886)) (= () (tl V886)))) (cons read-byte (cons (cons stinput ()) ()))) (true V886)))
+(defun shen.error-macro (V774) (cond ((and (cons? V774) (and (= error (hd V774)) (cons? (tl V774)))) (cons simple-error (cons (shen.mkstr (hd (tl V774)) (tl (tl V774))) ()))) (true V774)))
 
-(defun shen.compose (V887 V888) (cond ((= () V887) V888) ((cons? V887) (shen.compose (tl V887) ((hd V887) V888))) (true (shen.sys-error shen.compose))))
+(defun shen.output-macro (V775) (cond ((and (cons? V775) (and (= output (hd V775)) (cons? (tl V775)))) (cons shen.prhush (cons (shen.mkstr (hd (tl V775)) (tl (tl V775))) (cons (cons stoutput ()) ())))) ((and (cons? V775) (and (= pr (hd V775)) (and (cons? (tl V775)) (= () (tl (tl V775)))))) (cons pr (cons (hd (tl V775)) (cons (cons stoutput ()) ())))) (true V775)))
 
-(defun shen.compile-macro (V889) (cond ((and (cons? V889) (and (= compile (hd V889)) (and (cons? (tl V889)) (and (cons? (tl (tl V889))) (= () (tl (tl (tl V889)))))))) (cons compile (cons (hd (tl V889)) (cons (hd (tl (tl V889))) (cons (cons lambda (cons E (cons (cons if (cons (cons cons? (cons E ())) (cons (cons error (cons "parse error here: ~S~%" (cons E ()))) (cons (cons error (cons "parse error~%" ())) ())))) ()))) ()))))) (true V889)))
+(defun shen.make-string-macro (V776) (cond ((and (cons? V776) (and (= make-string (hd V776)) (cons? (tl V776)))) (shen.mkstr (hd (tl V776)) (tl (tl V776)))) (true V776)))
 
-(defun shen.prolog-macro (V890) (cond ((and (cons? V890) (= prolog? (hd V890))) (let F (gensym shen.f) (let Receive (shen.receive-terms (tl V890)) (let PrologDef (eval (append (cons defprolog (cons F ())) (append Receive (append (cons <-- ()) (append (shen.pass-literals (tl V890)) (cons ; ())))))) (let Query (cons F (append Receive (cons (cons shen.start-new-prolog-process ()) (cons (cons freeze (cons true ())) ())))) Query))))) (true V890)))
+(defun shen.input-macro (V777) (cond ((and (cons? V777) (and (= lineread (hd V777)) (= () (tl V777)))) (cons lineread (cons (cons stinput ()) ()))) ((and (cons? V777) (and (= input (hd V777)) (= () (tl V777)))) (cons input (cons (cons stinput ()) ()))) ((and (cons? V777) (and (= read (hd V777)) (= () (tl V777)))) (cons read (cons (cons stinput ()) ()))) ((and (cons? V777) (and (= input+ (hd V777)) (and (cons? (tl V777)) (= () (tl (tl V777)))))) (cons input+ (cons (hd (tl V777)) (cons (cons stinput ()) ())))) ((and (cons? V777) (and (= read-byte (hd V777)) (= () (tl V777)))) (cons read-byte (cons (cons stinput ()) ()))) (true V777)))
 
-(defun shen.receive-terms (V895) (cond ((= () V895) ()) ((and (cons? V895) (and (cons? (hd V895)) (and (= receive (hd (hd V895))) (and (cons? (tl (hd V895))) (= () (tl (tl (hd V895)))))))) (cons (hd (tl (hd V895))) (shen.receive-terms (tl V895)))) ((cons? V895) (shen.receive-terms (tl V895))) (true (shen.sys-error shen.receive-terms))))
+(defun shen.compose (V778 V779) (cond ((= () V778) V779) ((cons? V778) (shen.compose (tl V778) ((hd V778) V779))) (true (shen.f_error shen.compose))))
 
-(defun shen.pass-literals (V898) (cond ((= () V898) ()) ((and (cons? V898) (and (cons? (hd V898)) (and (= receive (hd (hd V898))) (and (cons? (tl (hd V898))) (= () (tl (tl (hd V898)))))))) (shen.pass-literals (tl V898))) ((cons? V898) (cons (hd V898) (shen.pass-literals (tl V898)))) (true (shen.sys-error shen.pass-literals))))
+(defun shen.compile-macro (V780) (cond ((and (cons? V780) (and (= compile (hd V780)) (and (cons? (tl V780)) (and (cons? (tl (tl V780))) (= () (tl (tl (tl V780)))))))) (cons compile (cons (hd (tl V780)) (cons (hd (tl (tl V780))) (cons (cons lambda (cons E (cons (cons if (cons (cons cons? (cons E ())) (cons (cons error (cons "parse error here: ~S~%" (cons E ()))) (cons (cons error (cons "parse error~%" ())) ())))) ()))) ()))))) (true V780)))
 
-(defun shen.defprolog-macro (V899) (cond ((and (cons? V899) (and (= defprolog (hd V899)) (cons? (tl V899)))) (compile (lambda X880 (shen.<defprolog> X880)) (tl V899) (lambda Y (shen.prolog-error (hd (tl V899)) Y)))) (true V899)))
+(defun shen.prolog-macro (V781) (cond ((and (cons? V781) (= prolog? (hd V781))) (let F (gensym shen.f) (let Receive (shen.receive-terms (tl V781)) (let PrologDef (eval (append (cons defprolog (cons F ())) (append Receive (append (cons <-- ()) (append (shen.pass-literals (tl V781)) (cons ; ())))))) (let Query (cons F (append Receive (cons (cons shen.start-new-prolog-process ()) (cons (cons freeze (cons true ())) ())))) Query))))) (true V781)))
 
-(defun shen.datatype-macro (V900) (cond ((and (cons? V900) (and (= datatype (hd V900)) (cons? (tl V900)))) (cons shen.process-datatype (cons (shen.intern-type (hd (tl V900))) (cons (cons compile (cons (cons function (cons shen.<datatype-rules> ())) (cons (shen.rcons_form (tl (tl V900))) (cons (cons function (cons shen.datatype-error ())) ())))) ())))) (true V900)))
+(defun shen.receive-terms (V786) (cond ((= () V786) ()) ((and (cons? V786) (and (cons? (hd V786)) (and (= shen.receive (hd (hd V786))) (and (cons? (tl (hd V786))) (= () (tl (tl (hd V786)))))))) (cons (hd (tl (hd V786))) (shen.receive-terms (tl V786)))) ((cons? V786) (shen.receive-terms (tl V786))) (true (shen.f_error shen.receive-terms))))
 
-(defun shen.intern-type (V901) (intern (cn "type#" (str V901))))
+(defun shen.pass-literals (V789) (cond ((= () V789) ()) ((and (cons? V789) (and (cons? (hd V789)) (and (= shen.receive (hd (hd V789))) (and (cons? (tl (hd V789))) (= () (tl (tl (hd V789)))))))) (shen.pass-literals (tl V789))) ((cons? V789) (cons (hd V789) (shen.pass-literals (tl V789)))) (true (shen.f_error shen.pass-literals))))
 
-(defun shen.@s-macro (V902) (cond ((and (cons? V902) (and (= @s (hd V902)) (and (cons? (tl V902)) (and (cons? (tl (tl V902))) (cons? (tl (tl (tl V902)))))))) (cons @s (cons (hd (tl V902)) (cons (shen.@s-macro (cons @s (tl (tl V902)))) ())))) ((and (cons? V902) (and (= @s (hd V902)) (and (cons? (tl V902)) (and (cons? (tl (tl V902))) (and (= () (tl (tl (tl V902)))) (string? (hd (tl V902)))))))) (let E (explode (hd (tl V902))) (if (> (length E) 1) (shen.@s-macro (cons @s (append E (tl (tl V902))))) V902))) (true V902)))
+(defun shen.defprolog-macro (V790) (cond ((and (cons? V790) (and (= defprolog (hd V790)) (cons? (tl V790)))) (compile (lambda V771 (shen.<defprolog> V771)) (tl V790) (lambda Y (shen.prolog-error (hd (tl V790)) Y)))) (true V790)))
 
-(defun shen.synonyms-macro (V903) (cond ((and (cons? V903) (= synonyms (hd V903))) (cons shen.synonyms-help (cons (shen.rcons_form (shen.curry-synonyms (tl V903))) ()))) (true V903)))
+(defun shen.datatype-macro (V791) (cond ((and (cons? V791) (and (= datatype (hd V791)) (cons? (tl V791)))) (cons shen.process-datatype (cons (shen.intern-type (hd (tl V791))) (cons (cons compile (cons (cons function (cons shen.<datatype-rules> ())) (cons (shen.rcons_form (tl (tl V791))) (cons (cons function (cons shen.datatype-error ())) ())))) ())))) (true V791)))
 
-(defun shen.curry-synonyms (V904) (map (lambda X881 (shen.curry-type X881)) V904))
+(defun shen.intern-type (V792) (intern (cn "type#" (str V792))))
 
-(defun shen.nl-macro (V905) (cond ((and (cons? V905) (and (= nl (hd V905)) (= () (tl V905)))) (cons nl (cons 1 ()))) (true V905)))
+(defun shen.@s-macro (V793) (cond ((and (cons? V793) (and (= @s (hd V793)) (and (cons? (tl V793)) (and (cons? (tl (tl V793))) (cons? (tl (tl (tl V793)))))))) (cons @s (cons (hd (tl V793)) (cons (shen.@s-macro (cons @s (tl (tl V793)))) ())))) ((and (cons? V793) (and (= @s (hd V793)) (and (cons? (tl V793)) (and (cons? (tl (tl V793))) (and (= () (tl (tl (tl V793)))) (string? (hd (tl V793)))))))) (let E (explode (hd (tl V793))) (if (> (length E) 1) (shen.@s-macro (cons @s (append E (tl (tl V793))))) V793))) (true V793)))
 
-(defun shen.assoc-macro (V906) (cond ((and (cons? V906) (and (cons? (tl V906)) (and (cons? (tl (tl V906))) (and (cons? (tl (tl (tl V906)))) (element? (hd V906) (cons @p (cons @v (cons append (cons and (cons or (cons + (cons * (cons do ()))))))))))))) (cons (hd V906) (cons (hd (tl V906)) (cons (shen.assoc-macro (cons (hd V906) (tl (tl V906)))) ())))) (true V906)))
+(defun shen.synonyms-macro (V794) (cond ((and (cons? V794) (= synonyms (hd V794))) (cons shen.synonyms-help (cons (shen.rcons_form (shen.curry-synonyms (tl V794))) ()))) (true V794)))
 
-(defun shen.let-macro (V907) (cond ((and (cons? V907) (and (= let (hd V907)) (and (cons? (tl V907)) (and (cons? (tl (tl V907))) (and (cons? (tl (tl (tl V907)))) (cons? (tl (tl (tl (tl V907)))))))))) (cons let (cons (hd (tl V907)) (cons (hd (tl (tl V907))) (cons (shen.let-macro (cons let (tl (tl (tl V907))))) ()))))) (true V907)))
+(defun shen.curry-synonyms (V795) (map (lambda V772 (shen.curry-type V772)) V795))
 
-(defun shen.abs-macro (V908) (cond ((and (cons? V908) (and (= /. (hd V908)) (and (cons? (tl V908)) (and (cons? (tl (tl V908))) (cons? (tl (tl (tl V908)))))))) (cons lambda (cons (hd (tl V908)) (cons (shen.abs-macro (cons /. (tl (tl V908)))) ())))) ((and (cons? V908) (and (= /. (hd V908)) (and (cons? (tl V908)) (and (cons? (tl (tl V908))) (= () (tl (tl (tl V908)))))))) (cons lambda (tl V908))) (true V908)))
+(defun shen.nl-macro (V796) (cond ((and (cons? V796) (and (= nl (hd V796)) (= () (tl V796)))) (cons nl (cons 1 ()))) (true V796)))
 
-(defun shen.cases-macro (V911) (cond ((and (cons? V911) (and (= cases (hd V911)) (and (cons? (tl V911)) (and (= true (hd (tl V911))) (cons? (tl (tl V911))))))) (hd (tl (tl V911)))) ((and (cons? V911) (and (= cases (hd V911)) (and (cons? (tl V911)) (and (cons? (tl (tl V911))) (= () (tl (tl (tl V911)))))))) (cons if (cons (hd (tl V911)) (cons (hd (tl (tl V911))) (cons (cons simple-error (cons "error: cases exhausted" ())) ()))))) ((and (cons? V911) (and (= cases (hd V911)) (and (cons? (tl V911)) (cons? (tl (tl V911)))))) (cons if (cons (hd (tl V911)) (cons (hd (tl (tl V911))) (cons (shen.cases-macro (cons cases (tl (tl (tl V911))))) ()))))) ((and (cons? V911) (and (= cases (hd V911)) (and (cons? (tl V911)) (= () (tl (tl V911)))))) (simple-error "error: odd number of case elements
-")) (true V911)))
+(defun shen.assoc-macro (V797) (cond ((and (cons? V797) (and (cons? (tl V797)) (and (cons? (tl (tl V797))) (and (cons? (tl (tl (tl V797)))) (element? (hd V797) (cons @p (cons @v (cons append (cons and (cons or (cons + (cons * (cons do ()))))))))))))) (cons (hd V797) (cons (hd (tl V797)) (cons (shen.assoc-macro (cons (hd V797) (tl (tl V797)))) ())))) (true V797)))
 
-(defun shen.timer-macro (V912) (cond ((and (cons? V912) (and (= time (hd V912)) (and (cons? (tl V912)) (= () (tl (tl V912)))))) (shen.let-macro (cons let (cons Start (cons (cons get-time (cons run ())) (cons Result (cons (hd (tl V912)) (cons Finish (cons (cons get-time (cons run ())) (cons Time (cons (cons - (cons Finish (cons Start ()))) (cons Message (cons (cons shen.prhush (cons (cons cn (cons "
+(defun shen.let-macro (V798) (cond ((and (cons? V798) (and (= let (hd V798)) (and (cons? (tl V798)) (and (cons? (tl (tl V798))) (and (cons? (tl (tl (tl V798)))) (cons? (tl (tl (tl (tl V798)))))))))) (cons let (cons (hd (tl V798)) (cons (hd (tl (tl V798))) (cons (shen.let-macro (cons let (tl (tl (tl V798))))) ()))))) (true V798)))
+
+(defun shen.abs-macro (V799) (cond ((and (cons? V799) (and (= /. (hd V799)) (and (cons? (tl V799)) (and (cons? (tl (tl V799))) (cons? (tl (tl (tl V799)))))))) (cons lambda (cons (hd (tl V799)) (cons (shen.abs-macro (cons /. (tl (tl V799)))) ())))) ((and (cons? V799) (and (= /. (hd V799)) (and (cons? (tl V799)) (and (cons? (tl (tl V799))) (= () (tl (tl (tl V799)))))))) (cons lambda (tl V799))) (true V799)))
+
+(defun shen.cases-macro (V802) (cond ((and (cons? V802) (and (= cases (hd V802)) (and (cons? (tl V802)) (and (= true (hd (tl V802))) (cons? (tl (tl V802))))))) (hd (tl (tl V802)))) ((and (cons? V802) (and (= cases (hd V802)) (and (cons? (tl V802)) (and (cons? (tl (tl V802))) (= () (tl (tl (tl V802)))))))) (cons if (cons (hd (tl V802)) (cons (hd (tl (tl V802))) (cons (cons simple-error (cons "error: cases exhausted" ())) ()))))) ((and (cons? V802) (and (= cases (hd V802)) (and (cons? (tl V802)) (cons? (tl (tl V802)))))) (cons if (cons (hd (tl V802)) (cons (hd (tl (tl V802))) (cons (shen.cases-macro (cons cases (tl (tl (tl V802))))) ()))))) ((and (cons? V802) (and (= cases (hd V802)) (and (cons? (tl V802)) (= () (tl (tl V802)))))) (simple-error "error: odd number of case elements
+")) (true V802)))
+
+(defun shen.timer-macro (V803) (cond ((and (cons? V803) (and (= time (hd V803)) (and (cons? (tl V803)) (= () (tl (tl V803)))))) (shen.let-macro (cons let (cons Start (cons (cons get-time (cons run ())) (cons Result (cons (hd (tl V803)) (cons Finish (cons (cons get-time (cons run ())) (cons Time (cons (cons - (cons Finish (cons Start ()))) (cons Message (cons (cons shen.prhush (cons (cons cn (cons "
 run time: " (cons (cons cn (cons (cons str (cons Time ())) (cons " secs
-" ()))) ()))) (cons (cons stoutput ()) ()))) (cons Result ())))))))))))))) (true V912)))
+" ()))) ()))) (cons (cons stoutput ()) ()))) (cons Result ())))))))))))))) (true V803)))
 
-(defun shen.tuple-up (V913) (cond ((cons? V913) (cons @p (cons (hd V913) (cons (shen.tuple-up (tl V913)) ())))) (true V913)))
+(defun shen.tuple-up (V804) (cond ((cons? V804) (cons @p (cons (hd V804) (cons (shen.tuple-up (tl V804)) ())))) (true V804)))
 
-(defun shen.put/get-macro (V914) (cond ((and (cons? V914) (and (= put (hd V914)) (and (cons? (tl V914)) (and (cons? (tl (tl V914))) (and (cons? (tl (tl (tl V914)))) (= () (tl (tl (tl (tl V914)))))))))) (cons put (cons (hd (tl V914)) (cons (hd (tl (tl V914))) (cons (hd (tl (tl (tl V914)))) (cons (cons value (cons *property-vector* ())) ())))))) ((and (cons? V914) (and (= get (hd V914)) (and (cons? (tl V914)) (and (cons? (tl (tl V914))) (= () (tl (tl (tl V914)))))))) (cons get (cons (hd (tl V914)) (cons (hd (tl (tl V914))) (cons (cons value (cons *property-vector* ())) ()))))) (true V914)))
+(defun shen.put/get-macro (V805) (cond ((and (cons? V805) (and (= put (hd V805)) (and (cons? (tl V805)) (and (cons? (tl (tl V805))) (and (cons? (tl (tl (tl V805)))) (= () (tl (tl (tl (tl V805)))))))))) (cons put (cons (hd (tl V805)) (cons (hd (tl (tl V805))) (cons (hd (tl (tl (tl V805)))) (cons (cons value (cons *property-vector* ())) ())))))) ((and (cons? V805) (and (= get (hd V805)) (and (cons? (tl V805)) (and (cons? (tl (tl V805))) (= () (tl (tl (tl V805)))))))) (cons get (cons (hd (tl V805)) (cons (hd (tl (tl V805))) (cons (cons value (cons *property-vector* ())) ()))))) ((and (cons? V805) (and (= unput (hd V805)) (and (cons? (tl V805)) (and (cons? (tl (tl V805))) (= () (tl (tl (tl V805)))))))) (cons unput (cons (hd (tl V805)) (cons (hd (tl (tl V805))) (cons (cons value (cons *property-vector* ())) ()))))) (true V805)))
 
-(defun shen.function-macro (V915) (cond ((and (cons? V915) (and (= function (hd V915)) (and (cons? (tl V915)) (= () (tl (tl V915)))))) (shen.function-abstraction (hd (tl V915)) (arity (hd (tl V915))))) (true V915)))
+(defun shen.function-macro (V806) (cond ((and (cons? V806) (and (= function (hd V806)) (and (cons? (tl V806)) (= () (tl (tl V806)))))) (shen.function-abstraction (hd (tl V806)) (arity (hd (tl V806))))) (true V806)))
 
-(defun shen.function-abstraction (V916 V917) (cond ((= 0 V917) (cons freeze (cons V916 ()))) ((= -1 V917) V916) (true (shen.function-abstraction-help V916 V917 ()))))
+(defun shen.function-abstraction (V807 V808) (cond ((= 0 V808) V807) ((= -1 V808) (shen.function-abstraction-help V807 1 ())) (true (shen.function-abstraction-help V807 V808 ()))))
 
-(defun shen.function-abstraction-help (V918 V919 V920) (cond ((= 0 V919) (cons V918 V920)) (true (let X (gensym V) (cons /. (cons X (cons (shen.function-abstraction-help V918 (- V919 1) (append V920 (cons X ()))) ())))))))
+(defun shen.function-abstraction-help (V809 V810 V811) (cond ((= 0 V810) (cons V809 V811)) (true (let X (gensym V) (cons /. (cons X (cons (shen.function-abstraction-help V809 (- V810 1) (append V811 (cons X ()))) ())))))))
 
-(defun undefmacro (V921) (do (set *macros* (remove V921 (value *macros*))) V921))
+(defun undefmacro (V812) (let MacroReg (value shen.*macroreg*) (let Pos (shen.findpos V812 MacroReg) (let Remove1 (set shen.*macroreg* (remove V812 MacroReg)) (let Remove2 (set *macros* (shen.remove-nth Pos (value *macros*))) V812)))))
+
+(defun shen.findpos (V820 V821) (cond ((= () V821) (simple-error (shen.app V820 " is not a macro
+" shen.a))) ((and (cons? V821) (= (hd V821) V820)) 1) ((cons? V821) (+ 1 (shen.findpos V820 (tl V821)))) (true (shen.f_error shen.findpos))))
+
+(defun shen.remove-nth (V824 V825) (cond ((and (= 1 V824) (cons? V825)) (tl V825)) ((cons? V825) (cons (hd V825) (shen.remove-nth (- V824 1) (tl V825)))) (true (shen.f_error shen.remove-nth))))
+
 
 

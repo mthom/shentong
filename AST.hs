@@ -1,7 +1,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module AST ( reduceSExpr ) where
+module AST ( reduceSExpr, bakeFreeVars ) where
 
 import Control.Applicative
 import Control.Monad.Except

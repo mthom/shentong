@@ -21,11 +21,11 @@ exceptionV :: ErrorMsg -> KLValue -> KLContext s KLValue
 exceptionV e v = throwError e'
     where e' = e <> " " <> (T.pack $ show v)
 
-stubFunction :: Monad m => Symbol -> m ApplContext
+stubFunction :: Symbol -> KLContext s ApplContext
 stubFunction name = return (Malformed msg)
     where msg = "function " <> name <> " is not defined"
 
-functionRef :: (MonadIO m, MonadState Env m) => Symbol -> m (IORef ApplContext)
+functionRef :: Symbol -> KLContext Env (IORef ApplContext)
 functionRef name = do
   st <- get
   case HM.lookup name (functionTable st) of
@@ -34,14 +34,14 @@ functionRef name = do
       stubFunction name >>= insertFunction name
       functionRef name
 
-symbolRef :: (MonadState Env m, MonadError ErrorMsg m) => Symbol -> m KLValue
+symbolRef :: Symbol -> KLContext Env KLValue
 symbolRef name = do
   st <- get
   case HM.lookup name (symbolTable st) of
     Just v  -> return v
     Nothing -> throwError "name not found in symbol table."
 
-insertFunction :: (MonadState Env m, MonadIO m) => Symbol -> ApplContext -> m ()
+insertFunction :: Symbol -> ApplContext -> KLContext Env ()
 insertFunction name f = do
   st <- get
   case HM.lookup name (functionTable st) of
@@ -50,7 +50,7 @@ insertFunction name f = do
       ref <- liftIO $ newIORef $! f
       put $ st { functionTable = HM.insert name ref (functionTable st) }
 
-insertSymbol :: MonadState Env m => Symbol -> KLValue -> m ()
+insertSymbol :: Symbol -> KLValue -> KLContext Env ()
 insertSymbol name v = do
   st <- get
   put $ st { symbolTable = HM.insert name v (symbolTable st) }
@@ -62,25 +62,38 @@ addVal i vals v = replace vals
           | otherwise = p : replace is'
         replace [] = [(i,v)]
 
-lookupVal :: DeBruijn -> Bindings -> KLContext s KLValue
+lookupVal :: DeBruijn -> Bindings -> KLContext Env KLValue
 lookupVal i vals = maybe err return (P.lookup i vals)
     where err = throwError "value not found in bindings list"
 
 fromIORef :: MonadIO m => IORef a -> m a
 fromIORef = liftIO . readIORef
 
-apply :: Function -> KLValue -> ApplContext
-apply (PartialApp f) v = Func (f v)
-apply (Context f) v = PL (f v)
+{-# SPECIALISE fromIORef :: IORef ApplContext -> KLContext Env ApplContext #-}
 
-mapM' :: Monad m => (a-> m b) -> [a] -> m [b]
+applyStep :: Function -> KLValue -> ApplContext
+applyStep (PartialApp f) v = Func "curried" (f v)
+applyStep (Context f) v = PL "thunk" (f v)
+
+mapM' :: Monad m => (a -> m b) -> [a] -> m [b]
 mapM' _ []     = return []
 mapM' f (x:xs) = do
   y  <- f x
   ys <- y `seq` mapM' f xs
   return (y:ys)
 
+{-# SPECIALISE mapM' :: (RSExpr -> KLContext Env KLValue) -> [RSExpr] -> KLContext Env [KLValue] #-}
+
 checkForBooleans :: Atom -> KLValue
 checkForBooleans (UnboundSym "true")  = Atom (B True)
 checkForBooleans (UnboundSym "false") = Atom (B False)  
 checkForBooleans a = Atom a
+
+apply :: ApplContext -> [KLValue] -> KLContext Env KLValue
+apply (Malformed e) _ = throwError e
+apply (PL _ c) [] = c
+apply f      [] = return (ApplC f)
+apply (Func _ f) (v:vs) = apply (applyStep f v) vs
+apply _ _ = throwError "too many arguments"
+
+

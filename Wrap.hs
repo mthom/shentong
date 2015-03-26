@@ -14,3 +14,6 @@ instance Wrappable (KLValue -> a) => Wrappable (KLValue -> KLValue -> a) where
                 
 instance s ~ Env => Wrappable (KLValue -> KLContext s KLValue) where
   wrap = Context
+
+wrapNamed :: Wrappable a => Symbol -> a -> ApplContext
+wrapNamed name fn = Func name (wrap fn)

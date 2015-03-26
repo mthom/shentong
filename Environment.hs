@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TupleSections #-}
 
-module Environment ( initEnv ) where
+module Environment ( initEnv, evalKL ) where
 
 import Control.Applicative
 import Control.Monad.Except
@@ -26,6 +26,8 @@ valueToTopLevel (List [Atom (UnboundSym "defun")
 valueToTopLevel se = SE <$> valueToSExpr se
 
 valueToSExpr :: KLValue -> KLContext Env SExpr
+valueToSExpr (ApplC (PL name _)) = return (Sym name)
+valueToSExpr (ApplC (Func name _)) = return (Sym name)
 valueToSExpr (Atom (UnboundSym sym)) = return (Sym sym)
 valueToSExpr (Atom a) = return (Lit a)
 valueToSExpr (List (l:ls)) = applToSExpr l ls
@@ -102,7 +104,7 @@ primitives = [("intern", wrap intern),
 
 initEnv :: (Applicative m, MonadIO m) => m Env
 initEnv = Env initSymbolTable <$> HM.fromList <$> mapM update primitives
-    where update (n, f) = (n,) <$> liftIO (newIORef $! Func f)
+    where update (n, f) = (n,) <$> liftIO (newIORef $! Func n f)
 
 initSymbolTable :: HM.Map Symbol KLValue
 initSymbolTable = HM.fromList [("*stoutput*", OutStream stdout),
