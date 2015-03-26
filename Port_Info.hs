@@ -33,4 +33,4 @@ expr14 = do (do klSet (Types.Atom (Types.UnboundSym "*os*")) (Types.Atom (Types.
             (do klSet (Types.Atom (Types.UnboundSym "*port*")) (Types.Atom (Types.Str "0.1"))) `catchError` (\(!kl_E) -> do return (Types.Atom (Types.Str "E")))
             (do klSet (Types.Atom (Types.UnboundSym "*porters*")) (Types.Atom (Types.Str "Mark Thom"))) `catchError` (\(!kl_E) -> do return (Types.Atom (Types.Str "E")))
             (do klSet (Types.Atom (Types.UnboundSym "*implementation*")) (Types.Atom (Types.Str "GHC 7.8.3"))) `catchError` (\(!kl_E) -> do return (Types.Atom (Types.Str "E")))
-            (do klSet (Types.Atom (Types.UnboundSym "*release*")) (Types.Atom (Types.Str "0.1"))) `catchError` (\(!kl_E) -> do return (Types.Atom (Types.Str "E")))
+            (do klSet (Types.Atom (Types.UnboundSym "*release*")) (Types.Atom (Types.Str "0.2.0"))) `catchError` (\(!kl_E) -> do return (Types.Atom (Types.Str "E")))
