@@ -17,13 +17,17 @@ Package dependencies are:
 + attoparsec
 + unordered-containers
 + uniplate
-+ parallel
++ findbin
 + hashmap
 
-Shentong runs on a fully native Haskell backend directly ported from
-the backend written in Shen's kernel language, K Lambda. It is
-licensed under BSD 3.  If cabal is not used to compile the sources,
-the GHC compiler option *-fno-full-laziness* must be used.
+.. some of which may be in the most recent Haskell Platform
+release. If not, they can be installed with cabal. findbin needs to be
+installed with cabal.
+
+An important note: the K Lambda directory must be included in the
+same directory as the Shen[.exe] executable, if one is
+produced. Until the raw K Lambda code is converted to Haskell and
+compiled as another module in the program, this is essential.
 
 * Try it
 
@@ -32,4 +36,5 @@ the GHC compiler option *-fno-full-laziness* must be used.
   : $> cabal sandbox init
   : $> cabal install
   : $> cd .cabal-sandbox/bin
+  : $> ln -s ../../K\ Lambda K\ Lambda
   : $> ./shen
