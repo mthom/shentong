@@ -83,8 +83,8 @@ str = strFn
               where s = case n of
                       KI i -> T.pack $ show i
                       KD d -> T.pack $ show d
-          strFn (ApplC (Func name _)) = return $ (Atom (Str name))
-          strFn (ApplC (PL name _)) = return $ (Atom (Str name))
+          strFn (ApplC (Func name _)) = return (Atom (Str name))
+          strFn (ApplC (PL name _)) = return (Atom (Str name))
           strFn v = throwError "str : first parameter must be an atom."
 
 {-
@@ -205,8 +205,6 @@ A --> A --> boolean
 eq :: KLValue -> KLValue -> KLContext s KLValue
 eq v1 v2 = return $ Atom (B (eqFn v1 v2))
   where
-    -- don't add the lambda and thunk false checks.
-    -- they don't work. for whatever reason.
     eqFn (ApplC (Func n _)) (Atom (UnboundSym n')) = n == n'
     eqFn (ApplC (Func n _)) (ApplC (Func n' _)) = n == n'
     eqFn (ApplC (PL n _)) (ApplC (PL n' _)) = n == n'
