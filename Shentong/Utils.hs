@@ -94,6 +94,7 @@ apply (Malformed e) _ = throwError e
 apply (PL _ c) [] = c
 apply f      [] = return (ApplC f)
 apply (Func _ f) (v:vs) = apply (applyStep f v) vs
-apply _ _ = throwError "too many arguments"
-
+apply f _ 
+  | Func name _ <- f = throwError $ name <> ": too many arguments"
+  | PL name _ <- f   = throwError $ name <> ": too many arguments"
 

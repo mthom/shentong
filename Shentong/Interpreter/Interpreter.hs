@@ -43,6 +43,9 @@ evalTrapError vals e tr = eval vals e `catchError` handleError
     where handleError e =
               eval vals tr >>= \case
                    ApplC (Func name f) -> apply (Func name f) [Excep e]
+                   Atom (UnboundSym n) -> do
+                     f <- fromIORef =<< functionRef n
+                     apply f [Excep e]                     
                    _ -> throwError "exception handler must be a function"
                    
 evalFreeze :: Bindings -> RSExpr -> KLContext Env KLValue
