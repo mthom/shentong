@@ -671,6 +671,7 @@ kl_do :: Types.KLValue ->
          Types.KLValue -> Types.KLContext Types.Env Types.KLValue
 kl_do (!kl_V1583) (!kl_V1584) = do return kl_V1584
 
+{-
 kl_elementP :: Types.KLValue ->
                Types.KLValue -> Types.KLContext Types.Env Types.KLValue
 kl_elementP (!kl_V1594) (!kl_V1595) = do let !appl_0 = List []
@@ -682,6 +683,24 @@ kl_elementP (!kl_V1594) (!kl_V1595) = do let !appl_0 = List []
                                                                                                                                     klIf kl_if_5 (do !appl_6 <- kl_V1595 `pseq` tl kl_V1595
                                                                                                                                                      kl_V1594 `pseq` (appl_6 `pseq` kl_elementP kl_V1594 appl_6)) (do klIf (Atom (B True)) (do let !aw_7 = Types.Atom (Types.UnboundSym "shen.f_error")
                                                                                                                                                                                                                                                applyWrapper aw_7 [ApplC (wrapNamed "element?" kl_elementP)]) (do return (List [])))))
+-}
+
+kl_elementP :: Types.KLValue ->
+               Types.KLValue -> Types.KLContext Types.Env Types.KLValue
+kl_elementP !v (List []) = return (Atom (B False))
+kl_elementP !v (List (h:hs)) = do
+  res <- eq h v
+  case res of
+   Atom (B True)  -> return (Atom (B True))
+   Atom (B False) -> kl_elementP v (List hs)
+   _ -> throwError "kl_elementP: eq did not return a boolean"
+kl_elementP !v (Cons h hs) = do
+  res <- eq h v
+  case res of
+   Atom (B True)  -> return (Atom (B True))
+   Atom (B False) -> kl_elementP v hs
+   _ -> throwError "kl_elementP: eq did not return a boolean"
+kl_elementP _ _ = applyWrapper (Atom (UnboundSym "shen.f_error")) [ApplC (wrapNamed "element?" kl_elementP)]
 
 kl_emptyP :: Types.KLValue ->
              Types.KLContext Types.Env Types.KLValue
