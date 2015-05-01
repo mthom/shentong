@@ -28,6 +28,30 @@ import Shentong.Backend.TStar
 import Shentong.Backend.PortInfo
 import Shentong.Backend.LoadShen
 
+{-
+Copyright (c) 2015, Mark Tarver
+All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of Mark Tarver may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY Mark Tarver ''AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL Mark Tarver BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-}
+
 functions = do insertFunction "shen.shen" (PL "shen.shen" kl_shen_shen)
                insertFunction "shen.loop" (PL "shen.loop" kl_shen_loop)
                insertFunction "shen.credits" (PL "shen.credits" kl_shen_credits)
@@ -85,6 +109,8 @@ functions = do insertFunction "shen.shen" (PL "shen.shen" kl_shen_shen)
                insertFunction "shen.compile_to_machine_code" (wrapNamed "shen.compile_to_machine_code" kl_shen_compile_to_machine_code)
                insertFunction "shen.record-source" (wrapNamed "shen.record-source" kl_shen_record_source)
                insertFunction "shen.compile_to_lambda+" (wrapNamed "shen.compile_to_lambda+" kl_shen_compile_to_lambdaPlus)
+               insertFunction "shen.update-symbol-table" (wrapNamed "shen.update-symbol-table" kl_shen_update_symbol_table)
+               insertFunction "shen.update-symbol-table-h" (wrapNamed "shen.update-symbol-table-h" kl_shen_update_symbol_table_h)
                insertFunction "shen.free_variable_check" (wrapNamed "shen.free_variable_check" kl_shen_free_variable_check)
                insertFunction "shen.extract_vars" (wrapNamed "shen.extract_vars" kl_shen_extract_vars)
                insertFunction "shen.extract_free_vars" (wrapNamed "shen.extract_free_vars" kl_shen_extract_free_vars)
@@ -229,6 +255,8 @@ functions = do insertFunction "shen.shen" (PL "shen.shen" kl_shen_shen)
                insertFunction "implementation" (PL "implementation" kl_implementation)
                insertFunction "release" (PL "release" kl_release)
                insertFunction "package?" (wrapNamed "package?" kl_packageP)
+               insertFunction "function" (wrapNamed "function" kl_function)
+               insertFunction "shen.lookup-func" (wrapNamed "shen.lookup-func" kl_shen_lookup_func)
                insertFunction "shen.datatype-error" (wrapNamed "shen.datatype-error" kl_shen_datatype_error)
                insertFunction "shen.<datatype-rules>" (wrapNamed "shen.<datatype-rules>" kl_shen_LBdatatype_rulesRB)
                insertFunction "shen.<datatype-rule>" (wrapNamed "shen.<datatype-rule>" kl_shen_LBdatatype_ruleRB)
@@ -423,7 +451,6 @@ functions = do insertFunction "shen.shen" (PL "shen.shen" kl_shen_shen)
                insertFunction "shen.s-prolog_literal" (wrapNamed "shen.s-prolog_literal" kl_shen_s_prolog_literal)
                insertFunction "shen.insert_deref" (wrapNamed "shen.insert_deref" kl_shen_insert_deref)
                insertFunction "shen.insert_lazyderef" (wrapNamed "shen.insert_lazyderef" kl_shen_insert_lazyderef)
-               insertFunction "shen.m_prolog_to_s-prolog_predicate" (wrapNamed "shen.m_prolog_to_s-prolog_predicate" kl_shen_m_prolog_to_s_prolog_predicate)
                insertFunction "shen.group_clauses" (wrapNamed "shen.group_clauses" kl_shen_group_clauses)
                insertFunction "shen.collect" (wrapNamed "shen.collect" kl_shen_collect)
                insertFunction "shen.same_predicate?" (wrapNamed "shen.same_predicate?" kl_shen_same_predicateP)
@@ -586,6 +613,9 @@ functions = do insertFunction "shen.shen" (PL "shen.shen" kl_shen_shen)
                insertFunction "arity" (wrapNamed "arity" kl_arity)
                insertFunction "systemf" (wrapNamed "systemf" kl_systemf)
                insertFunction "adjoin" (wrapNamed "adjoin" kl_adjoin)
+               insertFunction "shen.symbol-table-entry" (wrapNamed "shen.symbol-table-entry" kl_shen_symbol_table_entry)
+               insertFunction "shen.lambda-form" (wrapNamed "shen.lambda-form" kl_shen_lambda_form)
+               insertFunction "shen.add-end" (wrapNamed "shen.add-end" kl_shen_add_end)
                insertFunction "specialise" (wrapNamed "specialise" kl_specialise)
                insertFunction "unspecialise" (wrapNamed "unspecialise" kl_unspecialise)
                insertFunction "declare" (wrapNamed "declare" kl_declare)

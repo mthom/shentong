@@ -16,12 +16,12 @@ import Shentong.Utils
 import Shentong.Wrap
 
 valueToTopLevel :: KLValue -> KLContext Env TopLevel
-valueToTopLevel (List [Atom (UnboundSym "defun")
-                     , Atom (UnboundSym name)
-                     , List args, e]) =
+valueToTopLevel (Cons (Atom (UnboundSym "defun"))
+                      (Cons (Atom (UnboundSym name))
+                            (Cons args (Cons e (Atom Nil))))) =
     Defun name <$> toParamList args <*> valueToSExpr e
-    where toParamList (Atom (UnboundSym a) : as) = (a :) <$> toParamList as
-          toParamList [] = pure []
+    where toParamList (Cons (Atom (UnboundSym a)) as) = (a :) <$> toParamList as
+          toParamList (Atom Nil) = pure []
           toParamList _  = throwError "defun form contains invalid lambda list"
 valueToTopLevel se = SE <$> valueToSExpr se
 
@@ -29,18 +29,19 @@ valueToSExpr :: KLValue -> KLContext Env SExpr
 valueToSExpr (ApplC (PL name _)) = return (Sym name)
 valueToSExpr (ApplC (Func name _)) = return (Sym name)
 valueToSExpr (Atom (UnboundSym sym)) = return (Sym sym)
+valueToSExpr (Atom Nil) = return EmptyList
 valueToSExpr (Atom a) = return (Lit a)
-valueToSExpr (List (l:ls)) = applToSExpr l ls
-valueToSExpr (List []) = return EmptyList                             
+valueToSExpr (Cons v vs) = applToSExpr v (consToList vs)
+    where consToList (Cons v vs) = v : consToList vs
+          consToList (Atom Nil)  = []
+          consToList v = [v]
 valueToSExpr _ = throwError "cannot evaluate list containing non-literal values"
 
 applToSExpr :: KLValue -> [KLValue] -> KLContext Env SExpr
 applToSExpr (Atom (UnboundSym "cond")) l = Cond <$> listOfConds l
-    where listOfConds (List [cond, clause]:cs) =
+    where listOfConds (Cons cond (Cons clause (Atom Nil)) : cs) =
               (:) <$> ((,) <$> valueToSExpr cond <*> valueToSExpr clause)
                   <*> listOfConds cs
-          listOfConds (Cons cond clause:cs) =
-              listOfConds ((List [cond, clause]):cs)
           listOfConds [] = pure []
           listOfConds _  = throwError "improperly formed cond clause list"
 applToSExpr (Atom (UnboundSym "if")) [c,t,f] =

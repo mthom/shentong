@@ -2,11 +2,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE Rank2Types #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE ViewPatterns #-}
 
 module Shentong.Primitives where
 
 import Control.Applicative
+import Control.DeepSeq
 import Control.Exception
 import Control.Monad.Except
 import Control.Monad.ST
@@ -82,8 +84,8 @@ str = strFn
               where s = case n of
                       KI i -> T.pack $ show i
                       KD d -> T.pack $ show d
-          strFn (ApplC (Func name _)) = return (Atom (Str name))
-          strFn (ApplC (PL name _)) = return (Atom (Str name))
+          strFn (ApplC (Func name _)) = return $ (Atom (Str name))
+          strFn (ApplC (PL name _)) = return $ (Atom (Str name))
           strFn v = throwError "str : first parameter must be an atom."
 
 {-
@@ -161,7 +163,7 @@ cons : A --> (list A) --> (list A)
 -}
 klCons :: KLValue -> KLValue -> KLContext s KLValue
 klCons = consFn
-  where consFn klv (List klvs) = return (List (klv:klvs))
+  where -- consFn klv (List klvs) = return (List (klv:klvs))
         consFn v1 v2 = return (Cons v1 v2)
           
 {-
@@ -170,8 +172,8 @@ hd : (list A) --> A
 -}        
 hd :: KLValue -> KLContext s KLValue
 hd = hdFn
-  where hdFn (List (v:_)) = return v
-        hdFn (List []) = return (List [])
+  where --hdFn (List (v:_)) = return v
+        --hdFn (List []) = return (List [])
         hdFn (Cons v _) = return v
         hdFn v = throwError "hd: first parameter must be a list."
 
@@ -181,8 +183,8 @@ tl : (list A) --> (list A)
 -}
 tl :: KLValue -> KLContext s KLValue
 tl = tlFn
-  where tlFn (List []) = return (List [])
-        tlFn (List (_:vs)) = return (List vs)
+  where --tlFn (List []) = return (List [])
+        --tlFn (List (_:vs)) = return (List vs)
         tlFn (Cons _ v) = return v
         tlFn v = throwError "tl: first parameter must be a list."
 
@@ -192,35 +194,36 @@ cons? : A --> boolean
 -}
 consP :: KLValue -> KLContext s KLValue
 consP = consPFn
-  where consPFn (List []) = return (Atom (B False))
-        consPFn (List _) = return (Atom (B True))
+  where --consPFn (List []) = return (Atom (B False))
+        --consPFn (List _) = return (Atom (B True))
         consPFn (Cons _ _) = return (Atom (B True))
         consPFn _ = return (Atom (B False))
+
+eqCore :: KLValue -> KLValue -> Bool
+eqCore (ApplC (Func n _)) (Atom (UnboundSym n')) = n == n'
+eqCore (ApplC (Func n _)) (ApplC (Func n' _)) = n == n'
+eqCore (ApplC (PL n _)) (ApplC (PL n' _)) = n == n'
+eqCore (ApplC (PL n _)) (Atom (UnboundSym n'))   = n == n'
+eqCore (Atom (UnboundSym n')) (ApplC (Func n _)) = n == n'
+eqCore (Atom (UnboundSym n')) (ApplC (PL n _))   = n == n'
+eqCore (Atom (UnboundSym "true")) (Atom (B True)) = True
+eqCore (Atom (UnboundSym "false")) (Atom (B False)) = True
+eqCore (Atom (B True)) (Atom (UnboundSym "true")) = True
+eqCore (Atom (B False)) (Atom (UnboundSym "false")) = True
+eqCore (Atom a1) (Atom a2) = a1 == a2
+eqCore (Cons v1 v2) (Cons v3 v4) = eqCore v1 v3 && eqCore v2 v4
+eqCore (Vec v1) (Vec v2) = V.length v1 == V.length v2 && 
+   V.foldl' (\acc (x,y) -> acc && eqCore x y) True (V.zip v1 v2)
+eqCore _ _ = False
+-- don't add the lambda and thunk false checks.
+-- they don't work. for whatever reason.    
 
 {-
 =: equality
 A --> A --> boolean
 -}
 eq :: KLValue -> KLValue -> KLContext s KLValue
-eq v1 v2 = return $ Atom (B (eqFn v1 v2))
-  where
-    eqFn (ApplC (Func n _)) (Atom (UnboundSym n')) = n == n'
-    eqFn (ApplC (Func n _)) (ApplC (Func n' _)) = n == n'
-    eqFn (ApplC (PL n _)) (ApplC (PL n' _)) = n == n'
-    eqFn (ApplC (PL n _)) (Atom (UnboundSym n'))   = n == n'
-    eqFn (Atom (UnboundSym n')) (ApplC (Func n _)) = n == n'
-    eqFn (Atom (UnboundSym n')) (ApplC (PL n _))   = n == n'
-    eqFn (Atom (UnboundSym "true")) (Atom (B True)) = True
-    eqFn (Atom (UnboundSym "false")) (Atom (B False)) = True
-    eqFn (Atom (B True)) (Atom (UnboundSym "true")) = True
-    eqFn (Atom (B False)) (Atom (UnboundSym "false")) = True
-    eqFn (Atom a1) (Atom a2) = a1 == a2
-    eqFn (List l1) (List l2) = length l1 == length l2 &&
-      foldl' (\acc (x,y) -> acc && eqFn x y) True (zip l1 l2)
-    eqFn (Cons v1 v2) (Cons v3 v4) = eqFn v1 v3 && eqFn v2 v4
-    eqFn (Vec v1) (Vec v2) = V.length v1 == V.length v2 && 
-      V.foldl' (\acc (x,y) -> acc && eqFn x y) True (V.zip v1 v2)
-    eqFn _ _ = False
+eq v1 v2 = return $ Atom (B (eqCore v1 v2))
 
 {-
 type: labels the type of an expression
@@ -236,7 +239,7 @@ absvector : integer --> vector
 absvector :: KLValue -> KLContext s KLValue
 absvector = absvectorFn
   where absvectorFn (Atom (N (KI (fromIntegral -> n))))
-          | n >= 0 = return (Vec $ V.replicate n (List []))
+          | n >= 0 = return (Vec $ V.replicate n (Atom Nil))
           | otherwise = throwError "absvector n: must have n >= 0."
         absvectorFn _ =
           throwError "absvector: first parameter must be a positive integer."
@@ -279,7 +282,6 @@ absvectorP :: KLValue -> KLContext s KLValue
 absvectorP = absvectorPFn
   where absvectorPFn (Vec v) = return (Atom (B True))
         absvectorPFn _ = return (Atom (B False))
-
 
 {-
 write-byte: write an unsigned 8 bit byte to a stream
@@ -343,10 +345,10 @@ closeStream :: KLValue -> KLContext s KLValue
 closeStream = closeStreamFn
   where closeStreamFn (OutStream h) = do
           liftIO $ hClose h
-          return (List [])
+          return (Atom Nil)
         closeStreamFn (InStream h) = do
           liftIO $ hClose h
-          return (List [])
+          return (Atom Nil)
         closeStreamFn _ = throwError "close: takes a (stream D) as input."
 
 {-

@@ -34,7 +34,7 @@ data SExpr = Lit !Atom
            | Appl ![SExpr]
            | TrapError !SExpr !SExpr
            | EmptyList
-             deriving (Data, Typeable)
+             deriving (Data, Show, Typeable)
 
 type DeBruijn = Int
 type Bindings = [(DeBruijn, KLValue)]
@@ -99,19 +99,20 @@ instance Fractional KLNumber where
                                    
 data Atom = UnboundSym {-# UNPACK #-} !Symbol
           | B !Bool
+          | Nil
           | N !KLNumber
           | Str {-# UNPACK #-} !T.Text
             deriving (Data, Eq, Show, Typeable)
  
 data TopLevel = Defun {-# UNPACK #-} !Symbol !ParamList !SExpr
               | SE !SExpr
+                deriving Show
 
 data KLValue = Atom !Atom
              | Cons !KLValue !KLValue
              | Excep {-# UNPACK #-} !ErrorMsg
              | ApplC !ApplContext
              | InStream !Handle
-             | List ![KLValue]
              | OutStream !Handle
              | Vec {-# UNPACK #-} !(Vector KLValue)
              deriving (Show)

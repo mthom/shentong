@@ -36,7 +36,7 @@ eval vals (RIf c t f)       = evalIf vals c t f
 eval vals (RApplDir f as)   = evalApplDir vals f as
 eval vals (RApplForm a as)  = evalApplForm vals a as
 eval vals (RLit a)          = return (checkForBooleans a)
-eval vals REmptyList        = return (List [])
+eval vals REmptyList        = return (Atom Nil)
 
 evalTrapError :: Bindings -> RSExpr -> RSExpr -> KLContext Env KLValue
 evalTrapError vals e tr = eval vals e `catchError` handleError
@@ -63,7 +63,9 @@ evalApplDir' :: Bindings -> ApplContext -> [RSExpr] -> KLContext Env KLValue
 evalApplDir' vals ac args = mapM' (eval vals) args >>= apply ac
 
 evalApplDir :: Bindings -> IORef ApplContext -> [RSExpr] -> KLContext Env KLValue
-evalApplDir vals ref args = fromIORef ref >>= \ac -> evalApplDir' vals ac args
+evalApplDir vals ref args = do
+  ac <- fromIORef ref
+  mapM' (eval vals) args >>= apply ac
 
 evalApplForm :: Bindings -> RSExpr -> [RSExpr] -> KLContext Env KLValue
 evalApplForm vals (RLit (UnboundSym name)) args =
