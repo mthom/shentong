@@ -163,8 +163,7 @@ cons : A --> (list A) --> (list A)
 -}
 klCons :: KLValue -> KLValue -> KLContext s KLValue
 klCons = consFn
-  where -- consFn klv (List klvs) = return (List (klv:klvs))
-        consFn v1 v2 = return (Cons v1 v2)
+  where consFn v1 v2 = return (Cons v1 v2)
           
 {-
 hd: take the head of a list
@@ -172,9 +171,7 @@ hd : (list A) --> A
 -}        
 hd :: KLValue -> KLContext s KLValue
 hd = hdFn
-  where --hdFn (List (v:_)) = return v
-        --hdFn (List []) = return (List [])
-        hdFn (Cons v _) = return v
+  where hdFn (Cons v _) = return v
         hdFn v = throwError "hd: first parameter must be a list."
 
 {-
@@ -183,9 +180,7 @@ tl : (list A) --> (list A)
 -}
 tl :: KLValue -> KLContext s KLValue
 tl = tlFn
-  where --tlFn (List []) = return (List [])
-        --tlFn (List (_:vs)) = return (List vs)
-        tlFn (Cons _ v) = return v
+  where tlFn (Cons _ v) = return v
         tlFn v = throwError "tl: first parameter must be a list."
 
 {-
@@ -194,9 +189,7 @@ cons? : A --> boolean
 -}
 consP :: KLValue -> KLContext s KLValue
 consP = consPFn
-  where --consPFn (List []) = return (Atom (B False))
-        --consPFn (List _) = return (Atom (B True))
-        consPFn (Cons _ _) = return (Atom (B True))
+  where consPFn (Cons _ _) = return (Atom (B True))
         consPFn _ = return (Atom (B False))
 
 eqCore :: KLValue -> KLValue -> Bool
@@ -215,8 +208,6 @@ eqCore (Cons v1 v2) (Cons v3 v4) = eqCore v1 v3 && eqCore v2 v4
 eqCore (Vec v1) (Vec v2) = V.length v1 == V.length v2 && 
    V.foldl' (\acc (x,y) -> acc && eqCore x y) True (V.zip v1 v2)
 eqCore _ _ = False
--- don't add the lambda and thunk false checks.
--- they don't work. for whatever reason.    
 
 {-
 =: equality
@@ -239,10 +230,10 @@ absvector : integer --> vector
 absvector :: KLValue -> KLContext s KLValue
 absvector = absvectorFn
   where absvectorFn (Atom (N (KI (fromIntegral -> n))))
-          | n >= 0 = return (Vec $ V.replicate n (Atom Nil))
+          | n >= 0 = return (Vec $ V.replicate n (Atom (N (KI 0)))) -- 0 was Atom Nil
           | otherwise = throwError "absvector n: must have n >= 0."
-        absvectorFn _ =
-          throwError "absvector: first parameter must be a positive integer."
+        absvectorFn v =
+          throwError "absvector: first parameter must be a positive integer"
 
 {-
 address->: destructively assign a value to a vector address
@@ -265,14 +256,14 @@ addressTo = addressToFn
 
 {-
 <-address: retrieve a value from a vector address
-<-address: integer -> vector -> value
+<-address: vector -> integer -> value
 -}
 addressFrom :: KLValue -> KLValue -> KLContext s KLValue
 addressFrom = addressFromFn
   where addressFromFn (Vec v) (Atom (N (KI (fromIntegral -> n))))
           | n >= 0 && n < V.length v = return ((V.!) v n)
           | otherwise = throwError "address<- n v: n must be within range of v."
-        addressFromFn _ _ =
+        addressFromFn v n =
             throwError "<-address: requires a positive integer and vector"
             
 {-

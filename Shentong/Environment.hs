@@ -8,6 +8,7 @@ import Control.Monad.Except
 import qualified Data.HashMap as HM
 import Data.IORef
 import Data.Traversable hiding (mapM)
+import qualified Data.Vector as V
 import Shentong.Interpreter.Interpreter
 import Shentong.Primitives
 import System.IO
@@ -35,7 +36,18 @@ valueToSExpr (Cons v vs) = applToSExpr v (consToList vs)
     where consToList (Cons v vs) = v : consToList vs
           consToList (Atom Nil)  = []
           consToList v = [v]
-valueToSExpr _ = throwError "cannot evaluate list containing non-literal values"
+valueToSExpr (Vec v)
+  | V.null v  = pure emptyVec
+  | otherwise = vecToSExprList (V.tail v)
+    where emptyVec = Appl [Lit (UnboundSym "vector"), Lit (N (KI 0))]
+          
+          vecToSExprList vec 
+            | V.null vec = pure emptyVec
+            | otherwise  = do
+                se <- valueToSExpr (V.head vec)
+                ss <- vecToSExprList (V.tail vec)
+                return (Appl [Lit (UnboundSym "@v"), se , ss])
+valueToSExpr v = throwError "cannot evaluate list containing non-literal values"
 
 applToSExpr :: KLValue -> [KLValue] -> KLContext Env SExpr
 applToSExpr (Atom (UnboundSym "cond")) l = Cond <$> listOfConds l

@@ -17,7 +17,7 @@ import qualified Data.Text.IO as T
 import Prelude as P
 import Shentong.Types
 
-exceptionV :: ErrorMsg -> KLValue -> KLContext s KLValue
+exceptionV :: ErrorMsg -> KLValue -> KLContext s a
 exceptionV e v = throwError e'
     where e' = e <> " " <> (T.pack $ show v)
 
