@@ -8,7 +8,6 @@
 module Shentong.Primitives where
 
 import Control.Applicative
-import Control.DeepSeq
 import Control.Exception
 import Control.Monad.Except
 import Control.Monad.ST
