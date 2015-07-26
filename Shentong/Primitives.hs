@@ -282,6 +282,7 @@ writeByte = writeByteFn
   where writeByteFn num@(Atom (N (KI n))) (OutStream h) 
           | 0 <= n && n <= 255 = liftIO $ do
             BL.hPut h (BL.singleton (fromInteger n))
+            hFlush h
             return num
           | otherwise = throwError "write-byte n: must have 0 <= n <= 255."
         writeByteFn v1 v2 =
