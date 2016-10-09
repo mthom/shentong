@@ -1,7 +1,0 @@
-(set *os* "Windows 7")
-(set *language* "Haskell 2010")
-(set *version* "version 17")
-(set *port* "0.1")
-(set *porters* "Mark Thom")
-(set *implementation* "GHC 7.8.3")
-(set *release* "0.1")

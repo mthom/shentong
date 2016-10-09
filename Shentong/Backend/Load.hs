@@ -1,5 +1,7 @@
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE Strict #-}
+{-# LANGUAGE StrictData #-}
 {-# LANGUAGE ViewPatterns #-}
 
 module Shentong.Backend.Load where
