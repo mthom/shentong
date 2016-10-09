@@ -36,3 +36,8 @@ The current supported version is *Shen 19.1*.
   : $> cabal install
   : $> cd .cabal-sandbox/bin
   : $> ./shen
+
+or install it through Hackage:
+
+  : $> cabal install shentong
+  : $> ./shen
