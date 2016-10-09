@@ -5,7 +5,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE Rank2Types #-}
 
-module Shentong.Types where
+module Types where
 
 import Control.Applicative
 import Control.Monad.Except

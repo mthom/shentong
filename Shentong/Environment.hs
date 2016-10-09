@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TupleSections #-}
 
-module Shentong.Environment ( initEnv, evalKL ) where
+module Environment ( initEnv, evalKL ) where
 
 import Control.Applicative
 import Control.Monad.Except
@@ -9,12 +9,12 @@ import qualified Data.HashMap as HM
 import Data.IORef
 import Data.Traversable hiding (mapM)
 import qualified Data.Vector as V
-import Shentong.Interpreter.Interpreter
-import Shentong.Primitives
+import Interpreter.Interpreter
+import Primitives
 import System.IO
-import Shentong.Types
-import Shentong.Utils
-import Shentong.Wrap
+import Types
+import Utils
+import Wrap
 
 valueToTopLevel :: KLValue -> KLContext Env TopLevel
 valueToTopLevel (Cons (Atom (UnboundSym "defun"))
@@ -105,7 +105,7 @@ primitives = [("intern", wrap intern),
               ("close", wrap closeStream),
               ("get-time", wrap getTime),
               ("+", wrap add),
-              ("-", wrap Shentong.Primitives.subtract),
+              ("-", wrap Primitives.subtract),
               ("*", wrap multiply),
               ("/", wrap divide),
               (">", wrap greaterThan),

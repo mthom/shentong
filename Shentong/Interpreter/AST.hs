@@ -1,15 +1,15 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Shentong.Interpreter.AST ( reduceSExpr, bakeFreeVars ) where
+module Interpreter.AST ( reduceSExpr, bakeFreeVars ) where
 
 import Control.Applicative
 import Control.Monad.Except
 import Control.Monad.State
 import Data.Generics.Uniplate.Operations
 import Data.Traversable
-import Shentong.Types
-import Shentong.Utils
+import Types
+import Utils
 
 reduceSExpr :: ParamList -> SExpr -> KLContext Env RSExpr
 reduceSExpr args body = markBoundVars args (bakeFreeVars args body)

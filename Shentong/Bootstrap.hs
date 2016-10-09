@@ -1,31 +1,31 @@
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Shentong.Bootstrap where
+module Bootstrap where
 
-import Shentong.Environment
-import Shentong.Primitives
-import Shentong.Backend.Utils
-import Shentong.Types
-import Shentong.Utils
-import Shentong.Wrap
-import Shentong.Backend.FunctionTable
-import Shentong.Backend.Toplevel
-import Shentong.Backend.Core
-import Shentong.Backend.Sys
-import Shentong.Backend.Sequent
-import Shentong.Backend.Yacc
-import Shentong.Backend.Reader
-import Shentong.Backend.Prolog
-import Shentong.Backend.Track
-import Shentong.Backend.Load
-import Shentong.Backend.Writer
-import Shentong.Backend.Macros
-import Shentong.Backend.Declarations
-import Shentong.Backend.Types
-import Shentong.Backend.TStar
-import Shentong.Backend.PortInfo
-import Shentong.Backend.LoadShen
+import Environment
+import Primitives
+import Backend.Utils
+import Types
+import Utils
+import Wrap
+import Backend.FunctionTable
+import Backend.Toplevel
+import Backend.Core
+import Backend.Sys
+import Backend.Sequent
+import Backend.Yacc
+import Backend.Reader
+import Backend.Prolog
+import Backend.Track
+import Backend.Load
+import Backend.Writer
+import Backend.Macros
+import Backend.Declarations
+import Backend.Types
+import Backend.TStar
+import Backend.PortInfo
+import Backend.LoadShen
 
 bootstrap = do functions
                expr0

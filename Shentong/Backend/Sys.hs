@@ -4,18 +4,18 @@
 {-# LANGUAGE StrictData #-}
 {-# LANGUAGE ViewPatterns #-}
 
-module Shentong.Backend.Sys where
+module Backend.Sys where
 
 import Control.Monad.Except
 import Control.Parallel
-import Shentong.Environment
-import Shentong.Primitives as Primitives
-import Shentong.Backend.Utils
-import Shentong.Types as Types
-import Shentong.Utils
-import Shentong.Wrap
-import Shentong.Backend.Toplevel
-import Shentong.Backend.Core
+import Environment
+import Primitives
+import Backend.Utils
+import Types
+import Utils
+import Wrap
+import Backend.Toplevel
+import Backend.Core
 
 {-
 Copyright (c) 2015, Mark Tarver

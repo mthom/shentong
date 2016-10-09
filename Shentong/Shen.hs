@@ -1,6 +1,6 @@
-import Shentong.Bootstrap
-import Shentong.Environment
-import Shentong.Types
+import Bootstrap
+import Environment
+import Types
 
 main :: IO ()
 main = do

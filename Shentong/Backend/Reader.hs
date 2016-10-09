@@ -4,21 +4,21 @@
 {-# LANGUAGE StrictData #-}
 {-# LANGUAGE ViewPatterns #-}
 
-module Shentong.Backend.Reader where
+module Backend.Reader where
 
 import Control.Monad.Except
 import Control.Parallel
-import Shentong.Environment
-import Shentong.Primitives as Primitives
-import Shentong.Backend.Utils
-import Shentong.Types as Types
-import Shentong.Utils
-import Shentong.Wrap
-import Shentong.Backend.Toplevel
-import Shentong.Backend.Core
-import Shentong.Backend.Sys
-import Shentong.Backend.Sequent
-import Shentong.Backend.Yacc
+import Environment
+import Primitives as Primitives
+import Backend.Utils
+import Types as Types
+import Utils
+import Wrap
+import Backend.Toplevel
+import Backend.Core
+import Backend.Sys
+import Backend.Sequent
+import Backend.Yacc
 
 {-
 Copyright (c) 2015, Mark Tarver

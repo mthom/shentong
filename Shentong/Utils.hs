@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Shentong.Utils where
+module Utils where
 
 import Control.Applicative
 import Control.Monad.Except
@@ -15,7 +15,7 @@ import qualified Data.Vector as V
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import Prelude as P
-import Shentong.Types
+import Types
 
 exceptionV :: ErrorMsg -> KLValue -> KLContext s a
 exceptionV e v = throwError e'

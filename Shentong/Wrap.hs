@@ -2,9 +2,9 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Shentong.Wrap where
+module Wrap where
 
-import Shentong.Types
+import Types
 
 class Wrappable a where
   wrap :: a -> Function

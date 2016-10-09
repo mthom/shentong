@@ -1,13 +1,13 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Shentong.Interpreter.Interpreter ( evalTopLevel ) where
+module Interpreter.Interpreter ( evalTopLevel ) where
 
-import Shentong.Interpreter.AST
+import Interpreter.AST
 import Control.Monad.Except
 import Data.IORef
-import Shentong.Types
-import Shentong.Utils
+import Types
+import Utils
 
 evalTopLevel :: TopLevel -> KLContext Env KLValue
 evalTopLevel (SE se) = reduceSExpr [] se >>= eval []

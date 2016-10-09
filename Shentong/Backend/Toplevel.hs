@@ -4,16 +4,16 @@
 {-# LANGUAGE StrictData #-}
 {-# LANGUAGE ViewPatterns #-}
 
-module Shentong.Backend.Toplevel where
+module Backend.Toplevel where
 
 import Control.Monad.Except
 import Control.Parallel
-import Shentong.Environment
-import Shentong.Primitives as Primitives
-import Shentong.Backend.Utils
-import Shentong.Types as Types
-import Shentong.Utils
-import Shentong.Wrap
+import Environment
+import Primitives
+import Backend.Utils
+import Types
+import Utils
+import Wrap
 
 {-
 Copyright (c) 2015, Mark Tarver
