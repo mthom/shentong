@@ -10,10 +10,10 @@ import Data.IORef
 import Data.Traversable hiding (mapM)
 import qualified Data.Vector as V
 import Interpreter.Interpreter
-import Primitives
+import Core.Primitives
 import System.IO
-import Types
-import Utils
+import Core.Types
+import Core.Utils
 import Wrap
 
 valueToTopLevel :: KLValue -> KLContext Env TopLevel
@@ -105,7 +105,7 @@ primitives = [("intern", wrap intern),
               ("close", wrap closeStream),
               ("get-time", wrap getTime),
               ("+", wrap add),
-              ("-", wrap Primitives.subtract),
+              ("-", wrap Core.Primitives.subtract),
               ("*", wrap multiply),
               ("/", wrap divide),
               (">", wrap greaterThan),

@@ -4,7 +4,7 @@
 
 module Wrap where
 
-import Types
+import Core.Types
 
 class Wrappable a where
   wrap :: a -> Function

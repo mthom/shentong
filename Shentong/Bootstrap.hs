@@ -4,10 +4,10 @@
 module Bootstrap where
 
 import Environment
-import Primitives
+import Core.Primitives
 import Backend.Utils
-import Types
-import Utils
+import Core.Types
+import Core.Utils
 import Wrap
 import Backend.FunctionTable
 import Backend.Toplevel

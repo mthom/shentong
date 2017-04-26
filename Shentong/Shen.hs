@@ -1,6 +1,6 @@
 import Bootstrap
 import Environment
-import Types
+import Core.Types
 
 main :: IO ()
 main = do

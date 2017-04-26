@@ -1,0 +1,9 @@
+[submodule "Shentong/Backend"]
+	path = Shentong/Backend
+	url = https://github.com/mthom/shentong-backend
+[submodule "Shentong/Core"]
+	path = Shentong/Core
+	url = https://github.com/mthom/shentong-core
+[submodule "Shentong/Interpreter"]
+	path = Shentong/Interpreter
+	url = https://github.com/mthom/shentong-interpreter
