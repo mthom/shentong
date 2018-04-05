@@ -9,7 +9,7 @@
 Shentong is a Haskell implementation of [[http://www.shenlanguage.org][Shen]], a modern Lisp family
 programming language which includes many advanced and interesting
 features. The name is thematically in keeping with that of /shen/, a
-construct from an other esoteric religion.
+construct from another esoteric religion.
 
 Package dependencies are:
 
